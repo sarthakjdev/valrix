@@ -44,7 +44,7 @@ const createMatch = async (playerButtons) => {
     })
 
     // Create chat channel
-    await channels.create(CHAT_CHANNEL_NAME, { type: 'GUILD_TEXT', parent: category })
+    const chatChannel = await channels.create(CHAT_CHANNEL_NAME, { type: 'GUILD_TEXT', parent: category })
 
     // Create game settings channel and create invite link
     const gameSettingsChannel = await channels.create(GAME_SETTINGS_CHANNEL_NAME, {
@@ -197,6 +197,7 @@ const createMatch = async (playerButtons) => {
             await team1VoiceChannel.delete()
             await team2VoiceChannel.delete()
             await category.delete()
+            await chatChannel.delete
         } else {
             return buttonInteraction.reply({ content: `You're not allowed to click button`, ephemeral: true })
         }

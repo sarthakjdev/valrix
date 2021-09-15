@@ -52,14 +52,16 @@ class Components {
             .setLabel('SEARCHING')
             .setStyle('PRIMARY')
             .setDisabled(true)
-
+        const leaveQueue = new MessageButton()
+            .setCustomId('leaveQueue')
+            .setLabel('Leave Queue')
+            .setStyle('DANGER')
         const startQueueEmbed = new MessageEmbed()
             .setAuthor('QUE Bot', `${THUMBNAIL}`)
             .setColor('GREEN')
             .setDescription('```Waiting for more players to join.```')
             .setThumbnail(`${THUMBNAIL}`)
-
-        const rowDisabled = new MessageActionRow().addComponents(startQueueDisabled)
+        const rowDisabled = new MessageActionRow().addComponents(startQueueDisabled, leaveQueue)
 
         return {
             embeds: [startQueueEmbed],
