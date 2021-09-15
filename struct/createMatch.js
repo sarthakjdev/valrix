@@ -27,6 +27,14 @@ const createMatch = async (playerButtons) => {
             id: bi.user.id,
             deny: [Permissions.FLAGS.CONNECT],
         },
+        voiceAllowPermission: {
+            id: bi.user.id,
+            allow: [Permissions.FLAGS.CONNECT],
+        },
+        viewChannelPermission: {
+            id: bi.user.id,
+            allow: [Permissions.FLAGS.VIEW_CHANNEL],
+        },
         button: new MessageButton().setCustomId(bi.user.id)
             .setLabel(bi.user.tag)
             .setStyle('SECONDARY'),
@@ -45,11 +53,13 @@ const createMatch = async (playerButtons) => {
 
     // Create chat channel
     const chatChannel = await channels.create(CHAT_CHANNEL_NAME, { type: 'GUILD_TEXT', parent: category })
-
     // Create game settings channel and create invite link
     const gameSettingsChannel = await channels.create(GAME_SETTINGS_CHANNEL_NAME, {
         type: 'GUILD_TEXT',
-        permissionOverwrites: users.map((user) => user.readOnlyPermission),
+        permissionOverwrites: [{
+            id: channels.guild.id,
+            deny: [Permissions.FLAGS.VIEW_CHANNEL],
+        }, ...users.map((user) => user.viewChannelPermission)],
         parent: category,
     })
     const gameSettingsInvite = await gameSettingsChannel.createInvite()
@@ -113,13 +123,19 @@ const createMatch = async (playerButtons) => {
         type: 'GUILD_VOICE',
         userLimit: team1.length,
         parent: category,
-        permissionOverwrites: team2.map((player) => player.voiceDenyPermission),
+        permissionOverwrites: [{
+            id: channels.guild.id,
+            deny: [Permissions.FLAGS.VIEW_CHANNEL],
+        }, ...team1.map((user) => user.voiceAllowPermission)],
     })
     const team2VoiceChannel = await channels.create(TEAM2_VOICE_CHANNEL_NAME, {
         type: 'GUILD_VOICE',
         userLimit: team2.length,
         parent: category,
-        permissionOverwrites: team1.map((player) => player.voiceDenyPermission),
+        permissionOverwrites: [{
+            id: channels.guild.id,
+            deny: [Permissions.FLAGS.VIEW_CHANNEL],
+        }, ...team2.map((user) => user.voiceAllowPermission)],
     })
 
     const team1Members = team1.map((player) => members.cache.get(player.id))
@@ -197,7 +213,7 @@ const createMatch = async (playerButtons) => {
             await team1VoiceChannel.delete()
             await team2VoiceChannel.delete()
             await category.delete()
-            await chatChannel.delete
+            await chatChannel.delete()
         } else {
             return buttonInteraction.reply({ content: `You're not allowed to click button`, ephemeral: true })
         }
