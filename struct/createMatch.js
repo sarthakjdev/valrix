@@ -109,7 +109,7 @@ const createMatch = async (playerButtons) => {
             await buttonInteraction.reply({ content: `You have selected ${selectedPlayer.mention}`, ephemeral: true })
         }
         remainingPlayers = remainingPlayers.filter((player) => player.id !== buttonInteraction.customId)
-        const updatedGameSettingMsg = Components.genSelectionBoard(cap1, cap2, team1, team2, remainingPlayers)
+        const updatedGameSettingMsg = Components.genSelectionBoard(cap1, cap2, team1, team2, remainingPlayers, turn)
         if (!remainingPlayers.length) teamSelectionCollector.stop()
 
         return gameSettingsMsg.edit(updatedGameSettingMsg)
