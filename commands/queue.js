@@ -44,5 +44,22 @@ module.exports = {
             await buttonInteraction.update(searchingQueueComponents)
             interaction.client.queueManager.addToQueue(buttonInteraction)
         })
+
+        const leaveQueueFilter = (buttonInteraction) => buttonInteraction.customId === 'leaveQueue'
+        const leaveQueueCollector = interaction.channel.createMessageComponentCollector({ componentType: 'BUTTON', filter: leaveQueueFilter })
+        leaveQueueCollector.on('collect', async (playingButtonInteraction) => {
+            if (interaction.client.queueManager.isQueued(playingButtonInteraction.user.id)) {
+                interaction.client.queueManager.removeFromQueue(playingButtonInteraction)
+                await playingButtonInteraction.reply({
+                    content: `You have been removed from the queue. Dismiss the message and click start playing again, to join a queue again`,
+                    ephemeral: true,
+                })
+            } else {
+                await playingButtonInteraction.reply({
+                    content: `You already been removed from the queue.`,
+                    ephemeral: true,
+                })
+            }
+        })
     },
 }
