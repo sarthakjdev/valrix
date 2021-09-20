@@ -18,9 +18,6 @@ class QueueManager {
         if (this.queue.has(interaction.user.id)) {
             this.queue.delete(interaction.user.id)
         }
-        console.log(interaction.user.id)
-        console.log(this.queue)
-        console.log(this.queue.size)
     }
 
     isQueued(userId) {

@@ -214,9 +214,11 @@ const createMatch = async (playerButtons) => {
             await team2VoiceChannel.delete()
             await category.delete()
             await chatChannel.delete()
-        } else {
-            return buttonInteraction.reply({ content: `You're not allowed to click button`, ephemeral: true })
+
+            return 1
         }
+
+        return buttonInteraction.reply({ content: `You're not allowed to click button`, ephemeral: true })
     })
 }
 

@@ -1,5 +1,4 @@
 const { MessageActionRow, MessageButton, MessageEmbed } = require('discord.js')
-const { constant } = require('lodash')
 const _ = require('lodash')
 
 const {
