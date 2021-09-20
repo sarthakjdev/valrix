@@ -1,5 +1,6 @@
 const { Collection } = require('discord.js')
 const createMatch = require('./createMatch')
+const Components = require('./components')
 
 class QueueManager {
     constructor(opts) {
@@ -18,6 +19,14 @@ class QueueManager {
         if (this.queue.has(interaction.user.id)) {
             this.queue.delete(interaction.user.id)
         }
+    }
+
+    get size() {
+        return this.queue.size
+    }
+
+    async updateQueueSizeEmbed() {
+        await Promise.all(this.queue.map(async (pb) => pb.editReply(Components.searchingQueue(this.size))))
     }
 
     isQueued(userId) {

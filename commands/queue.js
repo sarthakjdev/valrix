@@ -40,9 +40,10 @@ module.exports = {
             filter: filterQueueButton,
         })
         startQueueButtonInteraction.on('collect', async (buttonInteraction) => {
-            const searchingQueueComponents = Components.searchingQueue()
+            const searchingQueueComponents = Components.searchingQueue(interaction.client.queueManager.size)
             await buttonInteraction.update(searchingQueueComponents)
             interaction.client.queueManager.addToQueue(buttonInteraction)
+            await interaction.client.queueManager.updateQueueSizeEmbed()
         })
 
         const leaveQueueFilter = (buttonInteraction) => buttonInteraction.customId === 'leaveQueue'
@@ -50,6 +51,7 @@ module.exports = {
         leaveQueueCollector.on('collect', async (playingButtonInteraction) => {
             if (interaction.client.queueManager.isQueued(playingButtonInteraction.user.id)) {
                 interaction.client.queueManager.removeFromQueue(playingButtonInteraction)
+                await interaction.client.queueManager.updateQueueSizeEmbed()
                 await playingButtonInteraction.reply({
                     content: `You have been removed from the queue. Dismiss the message and click start playing again, to join a queue again`,
                     ephemeral: true,
