@@ -5,7 +5,7 @@ const startMsgComponents = Components.startPlaying()
 const queueComponents = Components.getQueue()
 
 module.exports = {
-    name: 'que',
+    name: 'gsq',
     exec: async (interaction) => {
         // Send Initial reply
         await interaction.reply({

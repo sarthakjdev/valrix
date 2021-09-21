@@ -151,7 +151,7 @@ const createMatch = async (playerButtons) => {
 
     await checkIn.delete()
 
-    let maps = ['Bind', 'Heaven', 'Split', 'Ascent', 'Icebox', 'Breeze']
+    let maps = ['Bind', 'Heaven', 'Split', 'Ascent', 'Icebox', 'Breeze', 'Fracture']
     let selectedMap
     let attacker
     let defender
