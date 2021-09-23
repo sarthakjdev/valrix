@@ -126,7 +126,7 @@ class Components {
     }
 
     // Components generated for map selection embeds
-    static genMapBoard(availableMaps, playerTurn, i) {
+    static genMapBoard(availableMaps, playerTurn, i, cap1, cap2) {
         // TODO : If availableMps.length = 2 -> change embed and button color and text to 'pick' from 'ban'
         let buttonColor = 'DANGER'
         let image = SELECT_MAP
@@ -143,13 +143,25 @@ class Components {
         }
 
         if (!availableMaps.length) {
-            if (i === 'Attacker') {
-                description = ` **You have choosen Attacker side** `
-                image = ATTACKER
+            if (i.customId === 'Attacker') {
+                if (i.user.id === cap1.id) {
+                    description = ` **Team A  have choosen Attacker side**`
+                    image = ATTACKER
+                }
+                if (i.user.id === cap2) {
+                    description = ` **Team B have choosen Attacker side**`
+                    image = ATTACKER
+                }
             }
-            if (i === 'Defender') {
-                description = ` **You have choosen Defender side** `
-                image = DEFENDER
+            if (i.customId === 'Defender') {
+                if (i.user.id === cap1.id) {
+                    description = ` **Team A  have choosen Defender side**`
+                    image = DEFENDER
+                }
+                if (i.user.id === cap2) {
+                    description = ` **Team B have choosen Defender side**`
+                    image = DEFENDER
+                }
             }
         }
         const embed = new MessageEmbed()
