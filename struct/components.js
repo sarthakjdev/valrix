@@ -58,7 +58,8 @@ class Components {
         const startQueueEmbed = new MessageEmbed()
             .setAuthor('QUE Bot', `${THUMBNAIL}`)
             .setColor('GREEN')
-            .setDescription(` *\`${size} Players in queue\`* \n \`Waiting for more players to join\` `)
+            .setDescription(`*\`${size} Players in queue\`*`)
+            .addField('<a:g_loading:890250524056764417>', `\`Waiting for more players to join\``)
             .setThumbnail(`${THUMBNAIL}`)
         const rowDisabled = new MessageActionRow().addComponents(startQueueDisabled, leaveQueue)
 
