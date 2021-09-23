@@ -48,9 +48,10 @@ class Components {
     static searchingQueue(size) {
         const startQueueDisabled = new MessageButton()
             .setCustomId('startQueue')
-            .setLabel('SEARCHING')
+            .setLabel('Searching')
             .setStyle('PRIMARY')
             .setDisabled(true)
+        startQueueDisabled.setEmoji('<a:Loading:890250872448229436>')
         const leaveQueue = new MessageButton()
             .setCustomId('leaveQueue')
             .setLabel('Leave Queue')
