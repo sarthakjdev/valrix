@@ -8,8 +8,6 @@ module.exports = {
             ephemeral: true,
         })
         const guildChannelList = await interaction.guild.channels.fetch()
-        // await console.log(guildChannelList)
-        await console.log(`There are ${guildChannelList.size} channels.`)
         guildChannelList.map((ch) => {
             channelsForDeletion.forEach((element) => {
                 if (ch.name === element) {
