@@ -196,21 +196,6 @@ class Components {
         }
     }
 
-    // Components generated to send end game embed
-    static endGameComponents() {
-        const endGameComponents = new MessageEmbed()
-            .setAuthor('QUE Bot', `${THUMBNAIL}`)
-            .setDescription(`**Don't click this now ! Press the button below once you ends with your game**`)
-            .setThumbnail(`${THUMBNAIL}`)
-            .setColor('RED')
-        const endGameButton = new MessageButton().setCustomId('End Game').setLabel('End Game').setStyle('DANGER')
-        const endGameActionRow = new MessageActionRow().addComponents(endGameButton)
-
-        return {
-            embeds: [endGameComponents],
-            components: [endGameActionRow],
-        }
-    }
 }
 
 module.exports = Components
