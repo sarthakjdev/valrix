@@ -31,7 +31,7 @@ module.exports = [
         ],
     },
     {
-        name: 'team',
+        name: 'register',
         description: 'register your team',
         type: 'CHAT_INPUT',
         options: [
