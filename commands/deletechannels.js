@@ -4,20 +4,15 @@ const channelsForDeletion = ['Valorant', 'Check-In', 'game-settings', 'Team A', 
 module.exports = {
     name: 'deletechannels',
     exec: async (interaction) => {
-        const subCommand = await interaction.options.getSubcommand()
+        const subCommand = interaction.options.getSubcommand()
         if (subCommand === 'all') {
             await interaction.reply({
                 content: 'Channels have been deleted',
                 ephemeral: true,
             })
-            const guildChannelList = await interaction.guild.channels.fetch()
-            guildChannelList.map((ch) => {
-                channelsForDeletion.forEach((element) => {
-                    if (ch.name === element) {
-                        ch.delete()
-                    }
-                })
-            })
+            let guildChannelList = await interaction.guild.channels.fetch()
+            guildChannelList = guildChannelList.filter((ch) => channelsForDeletion.includes(ch.name))
+            await new Promise(guildChannelList.map((ch) => ch.delete()))
         }
 
         if (subCommand === 'specific-channel') {
@@ -26,13 +21,8 @@ module.exports = {
                 content: 'Channels have been deleted',
                 ephemeral: true,
             })
-            const guildChannelList = await interaction.guild.channels.fetch()
-            const selectedChannelName = await interaction.guild.channels.fetch(`${channelSelected}`)
-            guildChannelList.forEach((ch) => {
-                if (ch.name === selectedChannelName.name) {
-                    ch.delete()
-                }
-            })
+            const selectedChannel = await interaction.guild.channels.fetch(`${channelSelected}`)
+            if (channelsForDeletion.includes(selectedChannel.name)) await selectedChannel.delete()
         }
     },
 }
