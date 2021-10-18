@@ -5,7 +5,7 @@
   "main": "index.js.js",
   "author": "Sarthak Jain contact.sarthakjain@gmail.com",
   "contributors": [
-    "Darshan Patel <lazy14k@gmail.com>"
+    "Darshan Patel <heyforscht@gmail.com>"
   ],
   "license": "ISC",
   "engines": {
@@ -24,8 +24,9 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "humanize-duration": "^3.25.1",
+    "knex": "^0.95.11",
     "lodash": "^4.17.21",
-    "mongoose": "^6.0.11",
-    "p-timeout": "^3.2.0"
+    "p-timeout": "^3.2.0",
+    "pg": "^8.7.1"
   }
 }

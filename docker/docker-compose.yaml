@@ -1,0 +1,16 @@
+version: '3.9'
+
+services:
+  postgres:
+    container_name: gls-postgres
+    image: postgres
+    environment:
+      - POSTGRES_USER=gls
+      - POSTGRES_DB=gls
+      - POSTGRES_PASSWORD=gls
+    volumes:
+      - data:/var/lib/postgresql/data
+    ports:
+      - "5431:5432"
+volumes:
+  data:
