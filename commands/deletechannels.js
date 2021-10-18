@@ -16,13 +16,12 @@ module.exports = {
         }
 
         if (subCommand === 'specific-channel') {
-            const channelSelected = await interaction.options.get('channelname').value
+            const channelSelected = await interaction.options.getChannel('channelname')
+            await channelSelected.delete()
             await interaction.reply({
                 content: 'Channels have been deleted',
                 ephemeral: true,
             })
-            const selectedChannel = await interaction.guild.channels.fetch(`${channelSelected}`)
-            if (channelsForDeletion.includes(selectedChannel.name)) await selectedChannel.delete()
         }
     },
 }
