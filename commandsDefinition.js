@@ -31,46 +31,63 @@ module.exports = [
         ],
     },
     {
-        name: 'register',
-        description: 'register your team',
+        name: 'register-team-name',
+        description: 'provides options for team management',
         type: 'CHAT_INPUT',
         options: [
             {
                 name: 'teamname',
-                description: 'name of your team',
+                description: 'name of the team',
+                type: 'STRING',
+                required: true,
+            },
+        ],
+    },
+    {
+        name: 'team-add-player',
+        description: 'add player to the team',
+        type: 'CHAT_INPUT',
+        options: [
+            {
+                name: 'playertag',
+                description: 'discord tag of the player',
+                type: 'USER',
+                required: true,
+            },
+            {
+                name: 'playergamename',
+                description: 'game name of the player',
                 type: 'STRING',
                 required: true,
             },
             {
-                name: 'captain',
-                description: 'name of your player1',
-                type: 'USER',
+                name: 'playertagline',
+                description: 'tagline of the player',
+                type: 'NUMBER',
                 required: true,
             },
+        ],
+    },
+    {
+        name: 'team-remove-player',
+        description: 'remove a player from the team',
+        type: 'CHAT_INPUT',
+        options: [
             {
-                name: 'playe2',
-                description: 'name of your player2',
-                type: 'USER',
-                required: true,
-            },
-            {
-                name: 'player3',
-                description: 'name of your player3',
-                type: 'USER',
-                required: true,
-            },
-            {
-                name: 'player4',
-                description: 'name of your player4',
-                type: 'USER',
-                required: true,
-            },
-            {
-                name: 'player5',
-                description: 'name of your player5',
+                name: 'playertag',
+                description: 'discord tag of the player',
                 type: 'USER',
                 required: true,
             },
         ],
     },
+    {
+        name: 'team-info',
+        description: 'information of your team',
+    },
+    {
+        name: 'report-match-end',
+        description: 'to report the ending of the match',
+    },
+
 ]

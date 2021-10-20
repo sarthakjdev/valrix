@@ -7,8 +7,6 @@
      2. /addSubstitute
     
      3. /addPlayer
-    
-     4. /startmatching
 
      5. /report
 

@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Discord bot for queuing players.",
   "main": "index.js.js",
-  "author": "Sarthak Jain contact.sarthakjain@gmail.com",
+  "author": ["Sarthak Jain contact.sarthakjain@gmail.com"],
   "contributors": [
     "Darshan Patel <heyforscht@gmail.com>"
   ],
