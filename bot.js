@@ -4,6 +4,7 @@ const { readdirSync } = require('fs')
 const path = require('path')
 const commandsDefinition = require('./commandsDefinition')
 const QueueManager = require('./struct/queueManager')
+const Factory = require('./models/factory')
 
 module.exports = class extends Client {
     constructor(opts) {
@@ -11,6 +12,7 @@ module.exports = class extends Client {
         this.commands = new Collection()
         this.slashCommands = new Collection()
         this.queueManager = new QueueManager({ client: this })
+        this.factory = new Factory(this)
         this.config = process.env
     }
 

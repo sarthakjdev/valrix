@@ -1,5 +1,5 @@
 const { Permissions, MessageButton } = require('discord.js')
-const pWaitFor = require('../util/pwaitfor')
+const pWaitFor = require('../util/pWaitFor')
 const Components = require('./components')
 
 const CATEGORY_NAME = 'Valorant'
