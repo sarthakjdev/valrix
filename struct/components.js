@@ -17,7 +17,7 @@ class Components {
             .addComponents(startPlayingButton)
 
         const startPlayingEmbed = new MessageEmbed()
-            .setAuthor('QUE Bot', `${THUMBNAIL}`)
+            .setAuthor('GLS Bot', `${THUMBNAIL}`)
             .setDescription('Tap on the button below to initiate the queuing process .')
             .setThumbnail(`${THUMBNAIL}`)
 
@@ -57,7 +57,7 @@ class Components {
             .setLabel('Leave Queue')
             .setStyle('DANGER')
         const startQueueEmbed = new MessageEmbed()
-            .setAuthor('QUE Bot', `${THUMBNAIL}`)
+            .setAuthor('GLS Bot', `${THUMBNAIL}`)
             .setColor('GREEN')
             .setDescription(`*\`${size} Players in queue\`*`)
             .addField('<a:g_loading:890250524056764417>', `\`Waiting for more players to join\``)
@@ -92,7 +92,7 @@ class Components {
             .setURL(`${url}`)
         const joinGameRow = new MessageActionRow().addComponents(joinGameButton)
         const joinGameEmbed = new MessageEmbed()
-            .setAuthor('QUE Bot', `${THUMBNAIL}`)
+            .setAuthor('GLS Bot', `${THUMBNAIL}`)
             .setColor('WHITE')
             .setDescription(' Now, You can join the game by clicking on the button below. ')
             .setThumbnail(`${THUMBNAIL}`)
@@ -113,7 +113,7 @@ class Components {
             .setDescription(`Captains mentioned below, now select your players one by one. 
             NOTE: No need to react sequentially, but just maintain the ethics and react only when its your turn 
             Its your turn : ${playerTurn ? playerTurn.mention : ''} `)
-            .setAuthor('Que Bot', THUMBNAIL)
+            .setAuthor('GLS Bot', THUMBNAIL)
             .addField('Team A', `${cap1.mention} 🌟 \n ${team1.map((user) => user.mention).join('\n')}`, true)
             .addField('Team B', `${cap2.mention} 🌟 \n ${team2.map((user) => user.mention).join('\n')}`, true)
         if (remainingPlayers.length) {
@@ -166,7 +166,7 @@ class Components {
             }
         }
         const embed = new MessageEmbed()
-            .setAuthor('QUE Bot', `${THUMBNAIL}`)
+            .setAuthor('GLS Bot', `${THUMBNAIL}`)
             .setDescription(`${description} `)
             .setThumbnail(`${THUMBNAIL}`)
             .setColor('WHITE')
@@ -185,7 +185,7 @@ class Components {
     static mapComponents(availableMaps, selectedMap) {
         const selectedMapImage = process.env[selectedMap.toUpperCase()]
         const selectedMapComponents = new MessageEmbed()
-            .setAuthor('QUE Bot', `${THUMBNAIL}`)
+            .setAuthor('GLS Bot', `${THUMBNAIL}`)
             .setDescription(`**You have selected ${selectedMap} for this match.**`)
             .setThumbnail(`${THUMBNAIL}`)
             .setColor('WHITE')
@@ -196,6 +196,33 @@ class Components {
         }
     }
 
+    // Component for providing team information
+    static teamComponents(team) {
+        const teamInfoComponent = new MessageEmbed()
+            .setAuthor('GLS Bot', `${THUMBNAIL}`)
+            .setDescription('Here is your team information')
+            .addField('Team Name', `${team.name}`, true)
+            .addField('Players', ` ${team.owner} 🌟 \n  ${team.players.map((user) => user.mention).join('\n')}`, true)
+            .setThumbnail(`${THUMBNAIL}`)
+            .setColor('GREEN')
+
+        return teamInfoComponent
+    }
+
+    // Components created to be sent on a player either being added or removed from the team.
+    static teamPlayerComponent(player, team, action) { // action = added or removed.
+        const prep = (action === 'added') ? 'to' : 'from'
+        const playerComponent = new MessageEmbed()
+            .setAuthor('GLS Bot', `${THUMBNAIL}`)
+            .setDescription(`**${player} has been ${action} ${prep} the team ${team.name} by ${team.owner}**`)
+            .setThumbnail(`${THUMBNAIL}`)
+            .setColor('GREEN')
+        const teamInfoComponent = this.teamComponents(team)
+
+        return {
+            embeds: [playerComponent, teamInfoComponent],
+        }
+    }
 }
 
 module.exports = Components
