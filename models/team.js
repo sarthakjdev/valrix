@@ -4,16 +4,24 @@ class Team {
         this.uuid = data.uuid
         this.name = data.name
         this.rating = data.rating
-        this.players = []
+        this._players = []
     }
 
     get owner() {
-        return this.players.find((p) => p.status === 'owner')
+        return this._players.find((p) => p.status === 'OWNER')
+    }
+
+    get players() {
+        return this._players.filter((p) => p.status !== 'SUB')
+    }
+
+    get sub() {
+        return this._players.filter((p) => p.stat === 'SUB')
     }
 
     addPlayers(players) {
-        if (Array.isArray(players)) this.players.push(...players)
-        else this.players.push(players)
+        if (Array.isArray(players)) this._players.push(...players)
+        else this._players.push(players)
     }
 }
 

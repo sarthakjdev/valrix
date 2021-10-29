@@ -15,27 +15,52 @@ class Factory {
         this.client = client
     }
 
-    async createTeam(name, owner) {
+    /**
+     * Create team
+     * @param {string} name
+     * @param {Object} owner
+     * @param {Player} player
+     * @return {Promise<Team>}
+     */
+    async createTeam(name, owner, player) {
         const [dbTeam] = await knex(TEAM_TABLE).insert({ name }).returning('*')
         const team = new Team(dbTeam)
-        let player
-        if (owner.player) player = await this.updateOwner(owner.id, team)
-        else player = this.createPlayer(owner.id, owner.ign, team)
-        team.addPlayers(player)
+        let teamOwner
+        if (player) teamOwner = await this.updateOwnerTeam(player.id, team)
+        else teamOwner = await this.createPlayer(owner.id, owner.valorantId, owner.valorantName, owner.valorantTag, PLAYER_STATUS.owner, team)
+        team.addPlayers(teamOwner)
 
         return team
     }
 
-    async createPlayer(id, ign, team) {
-        const [dbPlayer] = await knex(PLAYER_TABLE).insert({ id, ign, team: team.uuid }).returning('*')
-        dbPlayer.team = team
-        const player = new Player(dbPlayer)
-        await player.fetchValorantId()
+    /**
+     * Create Valorant player
+     * @param {string} id
+     * @param {string} valorantId
+     * @param {string} valorantName
+     * @param {string} valorantTag
+     * @param {PLAYER_STATUS} status
+     * @param {Team} team
+     * @return {Promise<Player>}
+     */
+    async createPlayer(id, valorantId, valorantName, valorantTag, status, team) {
+        const [dbPlayer] = await knex(PLAYER_TABLE)
+            .insert({
+                id, valorantId, valorantName, valorantTag, status, team: team.uuid,
+            }).returning('*')
 
-        return player
+        dbPlayer.team = team
+
+        return new Player(dbPlayer)
     }
 
-    async updateOwner(ownerId, team) {
+    /**
+     * Update owner's team
+     * @param {String} ownerId
+     * @param {Team} team
+     * @return {Promise<Player>}
+     */
+    async updateOwnerTeam(ownerId, team) {
         const [dbPlayer] = await knex(PLAYER_TABLE)
             .update({ team: team.uuid, status: PLAYER_STATUS.owner })
             .where({ id: ownerId })
@@ -45,6 +70,27 @@ class Factory {
         return new Player(dbPlayer)
     }
 
+    /**
+     * Update player's team
+     * @param {string} playerId
+     * @param {Team} team
+     * @return {Promise<Player>}
+     */
+    async updatePlayerTeam(playerId, team) {
+        const [dbPlayer] = await knex(PLAYER_TABLE)
+            .update({ team: team.uuid })
+            .where({ id: playerId })
+            .returning('*')
+        dbPlayer.team = team
+
+        return new Player(dbPlayer)
+    }
+
+    /**
+     * Get team by team uuid
+     * @param {string} uuid
+     * @return {Promise<undefined|Team>}
+     */
     async getTeamByUuid(uuid) {
         const [dbTeam] = await knex(TEAM_TABLE).where({ uuid })
         if (!dbTeam) return undefined
@@ -55,6 +101,11 @@ class Factory {
         return team
     }
 
+    /**
+     * Get team by team name
+     * @param {string} name
+     * @return {Promise<undefined|Team>}
+     */
     async getTeamByName(name) {
         const [dbTeam] = await knex(TEAM_TABLE).where({ name })
         if (!dbTeam) return undefined
@@ -65,6 +116,11 @@ class Factory {
         return team
     }
 
+    /**
+     * Get player by discord userId
+     * @param {string} id
+     * @return {Promise<Player|undefined>}
+     */
     async getPlayerById(id) {
         const [dbPlayer] = await knex(PLAYER_TABLE).where({ id })
         if (!dbPlayer) return undefined
@@ -74,6 +130,11 @@ class Factory {
         return player
     }
 
+    /**
+     * Get players of single team
+     * @param {Team} team
+     * @return {Promise<*>}
+     */
     async getTeamPlayers(team) {
         const players = await knex(PLAYER_TABLE).where({ team: team.uuid })
 

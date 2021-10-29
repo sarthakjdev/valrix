@@ -30,7 +30,7 @@ module.exports = [
         ],
     },
     {
-        name: 'team-register',
+        name: 'register-team',
         description: 'Register new team',
         type: 'CHAT_INPUT',
         options: [
@@ -41,8 +41,14 @@ module.exports = [
                 required: true,
             },
             {
-                name: 'ign',
-                description: 'Your in game name - Example Player#1234',
+                name: 'valorant-name',
+                description: 'Your in game name - Example Player',
+                type: 'STRING',
+                required: true,
+            },
+            {
+                name: 'valorant-tag',
+                description: 'Your in game tag - Example 1234',
                 type: 'STRING',
                 required: true,
             },
@@ -54,16 +60,32 @@ module.exports = [
         type: 'CHAT_INPUT',
         options: [
             {
-                name: 'player',
+                name: 'user',
                 description: 'The user whom you want to add in your team',
                 type: 'USER',
                 required: true,
             },
             {
-                name: 'playerign',
-                description: 'In game name of the player - Example Player#1234',
+                name: 'valorant-name',
+                description: `Player's in game name - Example Player`,
                 type: 'STRING',
                 required: true,
+            },
+            {
+                name: 'valorant-tag',
+                description: `Player's in game tag - Example 1234`,
+                type: 'STRING',
+                required: true,
+            },
+            {
+                name: 'player-type',
+                description: `Type of player sub/player`,
+                type: 'STRING',
+                required: true,
+                choices: [
+                    { name: 'Player', value: 'PLAYER' },
+                    { name: 'Substitute', value: 'SUB' },
+                ],
             },
         ],
     },

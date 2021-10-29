@@ -10,6 +10,5 @@ module.exports = {
 }
 
 // Testing
-// Check if user is owner
-// Check if user exist and belong to owner's team
-
+// Check if user is owner -> owner can only delete team, can't leave team
+// Check if user exist and belong to any team
