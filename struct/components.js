@@ -201,10 +201,10 @@ class Components {
         const teamCreatedComponents = new MessageEmbed()
             .setAuthor('GLS Bot', `${THUMBNAIL}`)
             .setDescription(`Team created`)
-            .addField('Team Name', `${team.name}`, true)
-            .addField('Players', ` ${team.owner} 🌟 \n  ${team.players.map((user) => user.mention).join('\n')}`, true)
+            .addField('Team Name', `${team.name}`)
+            .addField('Players', `${team.players.map((player) => `<@${player.id}>`).join('\n')}`, true)
             .setThumbnail(`${THUMBNAIL}`)
-            .setColor('GREEN')
+            .setColor('BLACK')
 
         return {
             embeds: [teamCreatedComponents],
@@ -216,22 +216,22 @@ class Components {
         const teamInfoComponent = new MessageEmbed()
             .setAuthor('GLS Bot', `${THUMBNAIL}`)
             .setDescription('Here is your team information')
-            .addField('Team Name', `${team.name}`, true)
-            .addField('Players', ` ${team.owner} 🌟 \n  ${team.players.map((user) => user.mention).join('\n')}`, true)
+            .addField('Team Name', `${team.name}`)
+            .addField('Players', `${team.players.map((player) => `<@${player.id}>`).join('\n')}`, true)
             .setThumbnail(`${THUMBNAIL}`)
-            .setColor('GREEN')
+            .setColor('BLACK')
 
         return teamInfoComponent // haven't returned an object of array because ths funtion has been called in the same class in add/remove player components.
     }
 
     // Components created to be sent on a player either being added or removed from the team.
-    static teamPlayerComponent(player, team, action) { // action = added or removed.
+    static teamPlayerComponent(player, team, action, user) { // action = added or removed.
         const prep = (action === 'added') ? 'to' : 'from'
         const playerComponent = new MessageEmbed()
             .setAuthor('GLS Bot', `${THUMBNAIL}`)
-            .setDescription(`**${player} has been ${action} ${prep} the team ${team.name} by ${team.owner}**`)
+            .setDescription(`**${player} has been ${action} ${prep} the team ${team.name} by ${user.id}**`)
             .setThumbnail(`${THUMBNAIL}`)
-            .setColor('GREEN')
+            .setColor('BLACK')
         const teamInfoComponent = this.teamComponents(team)
 
         return {

@@ -1,4 +1,5 @@
 const valorantAPI = require('../models/valorantAPI')
+const Components = require('../struct/components')
 
 module.exports = {
     name: 'team-add-player',
@@ -30,7 +31,11 @@ module.exports = {
         if (player) await client.factory.updatePlayerTeam(player.id, player.team)
         await client.factory.createPlayer(playerToAdd.id, valorantData.puuid, playerValorantName, playerValorantTag, playerType, owner.team)
 
-        return interaction.editReply(`${playerToAdd} has been added to team ${owner.team.name}`)
+        const playerAddedComponents = Components.teamPlayerComponent(playerToAdd, owner.team, 'added', user)
+
+        return interaction.editReply(playerAddedComponents)
+
+        // return interaction.editReply(`${playerToAdd} has been added to team ${owner.team.name}`)
     },
 }
 
