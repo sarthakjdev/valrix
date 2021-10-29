@@ -1,3 +1,4 @@
+const { create } = require('lodash')
 
 module.exports = [
     {
@@ -30,81 +31,113 @@ module.exports = [
         ],
     },
     {
-        name: 'register-team',
-        description: 'Register new team',
-        type: 'CHAT_INPUT',
+        name: 'team',
+        description: 'operate team for league',
+        type: 2,
         options: [
             {
-                name: 'name',
-                description: 'Name of the team',
-                type: 'STRING',
-                required: true,
-            },
-            {
-                name: 'valorant-name',
-                description: 'Your in game name - Example Player',
-                type: 'STRING',
-                required: true,
-            },
-            {
-                name: 'valorant-tag',
-                description: 'Your in game tag - Example 1234',
-                type: 'STRING',
-                required: true,
-            },
-        ],
-    },
-    {
-        name: 'team-add-player',
-        description: 'Add player to the team',
-        type: 'CHAT_INPUT',
-        options: [
-            {
-                name: 'user',
-                description: 'The user whom you want to add in your team',
-                type: 'USER',
-                required: true,
-            },
-            {
-                name: 'valorant-name',
-                description: `Player's in game name - Example Player`,
-                type: 'STRING',
-                required: true,
-            },
-            {
-                name: 'valorant-tag',
-                description: `Player's in game tag - Example 1234`,
-                type: 'STRING',
-                required: true,
-            },
-            {
-                name: 'player-type',
-                description: `Type of player sub/player`,
-                type: 'STRING',
-                required: true,
-                choices: [
-                    { name: 'Player', value: 'PLAYER' },
-                    { name: 'Substitute', value: 'SUB' },
+                name: 'create',
+                description: 'create a new team',
+                type: 1,
+                options: [
+                    {
+                        name: 'name',
+                        description: 'name of the team',
+                        type: 'STRING',
+                        required: true,
+                    },
+                    {
+                        name: 'valorant-name',
+                        description: 'valorant ingame name',
+                        type: 'STRING',
+                        required: true,
+                    },
+                    {
+                        name: 'valorant-tagline',
+                        description: 'valorant tagline',
+                        type: 'NUMBER',
+                        required: true,
+                    },
                 ],
             },
-        ],
-    },
-    {
-        name: 'team-remove-player',
-        description: 'Remove player from your team',
-        type: 'CHAT_INPUT',
-        options: [
             {
-                name: 'player',
-                description: 'Player whom you want to remove from team',
-                type: 'USER',
-                required: true,
+                name: 'delete',
+                description: 'delete a existing team',
+                type: 1,
             },
+            {
+                name: 'add',
+                description: 'add a new player to the team',
+                type: 1,
+                options: [
+                    {
+                        name: 'player',
+                        description: 'player to be added',
+                        type: 'USER',
+                        required: true,
+                    },
+                    {
+                        name: 'valorant-name',
+                        description: 'valorant ingame name of the player',
+                        type: 'STRING',
+                        required: true,
+                    },
+                    {
+                        name: 'valorant-tagline',
+                        description: 'valorant tagline of the player ',
+                        type: 'NUMBER',
+                        required: true,
+                    },
+                    {
+                        name: 'player-type',
+                        description: 'type of player',
+                        type: 'STRING',
+                        required: true,
+                        choices: [
+                            {
+                                name: 'player',
+                                value: 'PLAYER',
+                            },
+                            {
+                                name: 'sub',
+                                value: 'SUBUSTITUTE',
+                            },
+                        ],
+                    },
+                ],
+            },
+            {
+                name: 'remove',
+                description: 'remove a player from the team',
+                type: 1,
+                options: [
+                    {
+                        name: 'player',
+                        description: 'player to be added',
+                        type: 'USER',
+                        required: true,
+                    },
+                ],
+            },
+            {
+                name: 'info',
+                description: 'current information of a team',
+                type: 1,
+                options: [
+                    {
+                        name: 'player',
+                        description: 'player of that team',
+                        type: 'USER',
+                    },
+                    {
+                        name: 'team-name',
+                        description: 'name of the team',
+                        type: 'STRING',
+                    },
+                ],
+            },
+
         ],
-    },
-    {
-        name: 'team-info',
-        description: 'information of your team',
     },
     {
         name: 'report-match-end',
