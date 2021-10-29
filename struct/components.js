@@ -196,6 +196,21 @@ class Components {
         }
     }
 
+    // Components created for team creation:
+    static teamCreated(team) {
+        const teamCreatedComponents = new MessageEmbed()
+            .setAuthor('GLS Bot', `${THUMBNAIL}`)
+            .setDescription(`Team created`)
+            .addField('Team Name', `${team.name}`, true)
+            .addField('Players', ` ${team.owner} 🌟 \n  ${team.players.map((user) => user.mention).join('\n')}`, true)
+            .setThumbnail(`${THUMBNAIL}`)
+            .setColor('GREEN')
+
+        return {
+            embeds: [teamCreatedComponents],
+        }
+    }
+
     // Component for providing team information
     static teamComponents(team) {
         const teamInfoComponent = new MessageEmbed()
@@ -206,7 +221,7 @@ class Components {
             .setThumbnail(`${THUMBNAIL}`)
             .setColor('GREEN')
 
-        return teamInfoComponent
+        return teamInfoComponent // haven't returned an object of array because ths funtion has been called in the same class in add/remove player components.
     }
 
     // Components created to be sent on a player either being added or removed from the team.

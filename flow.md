@@ -1,16 +1,41 @@
 ### Working of bot 
 
+
+- operations : 
+
+        1. Create team (Only owner)
+        2. Delete team (Only owner)
+        3. Add Player (only 5 players as main and 3 as substitute) 
+                                                                    a. if usre is a owner or not. 
+                                                                    b. if valo account exist or not. 
+                                                                    c. Check the status of the players in (No of mains and subs)
+                                                                    d. get mmr of the player and calculate average of team for intial ranking .
+
+                        
+        4. Remove Player
+        5. Player can leave team. (Any player can do that instead of owner)
+        6. getting team information (Any player)
+        7. change status of player from main to substitute and vice versa
+        8. get user info (team , valo-ign etc)
+
 - command names : 
 
-     1. /registerteam 
+     1. /gsq   :- to start the queuing process for registered team. 
     
-     2. /addSubstitute
+     2. /register-team   : 
     
-     3. /addPlayer
+     3. /team-remove-player
 
-     5. /report
+     4. /team-add-player
 
-     6. 
+     5. /team-info
+
+     6. /user-info
+
+     6. report-match-end
+
+     7. delete-channels 
+
 
 - players will register their riot id with us .   
                                                input:   > riotInGameName
@@ -21,11 +46,6 @@
                                    asking input as : > teamName
                                                      > captain
                                                      > players
-
--  Extra features : 
-    1. adding substitute players in the team
-    2. removing a player from the team. 
-    3. updating team status.
 
 
 -  first matches will be played randomly, as we dont have rankng right now. 
