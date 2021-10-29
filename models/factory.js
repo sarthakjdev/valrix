@@ -87,6 +87,21 @@ class Factory {
     }
 
     /**
+     * Remove player from team
+     * @param {string} id
+     */
+    async removePlayer(playerId, team) {
+        const [dbPlayer] = await knex(PLAYER_TABLE)
+            .where({ id: playerId })
+            .del()
+            .returning('*')
+        dbPlayer.team = team
+        console.log(dbPlayer)
+
+        return team
+    }
+
+    /**
      * Get team by team uuid
      * @param {string} uuid
      * @return {Promise<undefined|Team>}

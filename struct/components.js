@@ -238,6 +238,20 @@ class Components {
             embeds: [playerComponent, teamInfoComponent],
         }
     }
+
+    // Components created to be sent on a player leaving a team
+    static playerLeftComponent(player, team) {
+        const playerLeftCompponent = new MessageEmbed()
+            .setAuthor('GLS Bot', `${THUMBNAIL}`)
+            .setDescription(`**${player} has left the team ${player.team.name}**`)
+            .setThumbnail(`${THUMBNAIL}`)
+            .setColor('BLACK')
+        const teamInfoComponent = this.teamComponents(team)
+
+        return {
+            embeds: [playerLeftCompponent, teamInfoComponent],
+        }
+    }
 }
 
 module.exports = Components

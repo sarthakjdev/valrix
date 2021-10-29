@@ -1,11 +1,23 @@
+const Components = require('../struct/components')
+
 module.exports = {
     name: 'team-remove-player',
     exec: async (interaction) => {
-        const player = interaction.options.get('playert').value
-        await interaction.reply({
-            content: `<@${player}> has been removed from your team`,
-            ephemeral: true,
-        })
+        const { client, user } = interaction
+        const leavingPlayer = interaction.user
+
+        await interaction.deferReply()
+        // Check if user is owner
+        const owner = await client.factory.getPlayerById(user.id)
+        if (owner.team || owner.team.owner.id === user.id) return interaction.editReply(`You are the captain of the team, you can't leave.`)
+
+        // Check if player exist in a team:
+        const player = await client.factory.getPlayerById(leavingPlayer.id)
+        if (!player && !player.team) return interaction.editReply(`Player ${leavingPlayer} doesn't  belongs to ${player.team.name}`)
+
+        const playerRemovalComponents = Components.playerLeftComponent(leavingPlayer, owner.team)
+
+        return interaction.editReply(playerRemovalComponents)
     },
 }
 

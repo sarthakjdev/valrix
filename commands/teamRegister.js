@@ -27,7 +27,8 @@ module.exports = {
         }
         team = await client.factory.createTeam(teamName, teamOwner, player)
         const owner = await interaction.client.users.fetch(team.owner.id)
-        console.log(team)
+
+        
 
         return interaction.editReply(`Team created with name ${team.name} for owner ${owner}`)
     },
