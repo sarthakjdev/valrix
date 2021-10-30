@@ -19,6 +19,22 @@ class Team {
         return this._players.filter((p) => p.stat === 'SUB')
     }
 
+    has(playerId) {
+        return !!this._players.find((p) => p.id === playerId)
+    }
+
+    get playerIds() {
+        return this._players.map((p) => p.id)
+    }
+
+    get ownerId() {
+        return this.owner?.id
+    }
+
+    removePlayer(playerId) {
+        this._players = this._players.filter((p) => p.id !== playerId)
+    }
+
     addPlayers(players) {
         if (Array.isArray(players)) this._players.push(...players)
         else this._players.push(players)

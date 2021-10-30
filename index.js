@@ -1,7 +1,7 @@
 require('dotenv').config()
 const { Intents, Options } = require('discord.js')
 const Bot = require('./bot')
-const errorPrint = require('./util/errorPrint')
+const Util = require('./util/Util')
 
 const bot = new Bot({
     shards: 'auto',
@@ -13,7 +13,7 @@ const bot = new Bot({
 })
 
 process.on('unhandledRejection', (error) => {
-    errorPrint(error, { description: 'Unhandled error' })
+    Util.errorPrint(error, { description: 'Unhandled error' })
 })
 
 bot.build().then()

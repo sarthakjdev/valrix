@@ -5,6 +5,7 @@ const path = require('path')
 const commandsDefinition = require('./commandsDefinition')
 const QueueManager = require('./struct/queueManager')
 const Factory = require('./models/factory')
+const Util = require('./util/Util')
 
 module.exports = class extends Client {
     constructor(opts) {
@@ -14,6 +15,7 @@ module.exports = class extends Client {
         this.queueManager = new QueueManager({ client: this })
         this.factory = new Factory(this)
         this.config = process.env
+        this.util = Util
     }
 
     async build() {

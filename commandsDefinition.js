@@ -1,5 +1,3 @@
-const { create } = require('lodash')
-
 module.exports = [
     {
         name: 'gsq',
@@ -48,13 +46,13 @@ module.exports = [
                     },
                     {
                         name: 'valorant-name',
-                        description: 'valorant ingame name',
+                        description: 'Valorant in-game name. Example Hiro',
                         type: 'STRING',
                         required: true,
                     },
                     {
-                        name: 'valorant-tagline',
-                        description: 'valorant tagline',
+                        name: 'valorant-tag',
+                        description: 'Valorant in-game tag. Example 1234',
                         type: 'NUMBER',
                         required: true,
                     },
@@ -62,35 +60,35 @@ module.exports = [
             },
             {
                 name: 'delete',
-                description: 'delete a existing team',
+                description: 'Delete a existing team',
                 type: 1,
             },
             {
                 name: 'add',
-                description: 'add a new player to the team',
+                description: 'Add a new player to your team',
                 type: 1,
                 options: [
                     {
-                        name: 'player',
-                        description: 'player to be added',
+                        name: 'user',
+                        description: 'User to be added in your team',
                         type: 'USER',
                         required: true,
                     },
                     {
                         name: 'valorant-name',
-                        description: 'valorant ingame name of the player',
+                        description: 'Valorant in-game name. Example Hiro',
                         type: 'STRING',
                         required: true,
                     },
                     {
                         name: 'valorant-tagline',
-                        description: 'valorant tagline of the player ',
+                        description: 'Valorant in-game tag. Example 1234 ',
                         type: 'NUMBER',
                         required: true,
                     },
                     {
                         name: 'player-type',
-                        description: 'type of player',
+                        description: 'Type of player. Sub/Player',
                         type: 'STRING',
                         required: true,
                         choices: [
@@ -100,7 +98,7 @@ module.exports = [
                             },
                             {
                                 name: 'sub',
-                                value: 'SUBUSTITUTE',
+                                value: 'SUBSTITUTE',
                             },
                         ],
                     },
@@ -108,12 +106,12 @@ module.exports = [
             },
             {
                 name: 'remove',
-                description: 'remove a player from the team',
+                description: 'Remove a player from the team',
                 type: 1,
                 options: [
                     {
-                        name: 'player',
-                        description: 'player to be added',
+                        name: 'user',
+                        description: 'player to be removed from your team',
                         type: 'USER',
                         required: true,
                     },
@@ -121,17 +119,17 @@ module.exports = [
             },
             {
                 name: 'info',
-                description: 'current information of a team',
+                description: 'Current information of a team',
                 type: 1,
                 options: [
                     {
-                        name: 'player',
-                        description: 'player of that team',
+                        name: 'user',
+                        description: `User who's team info you want to check.`,
                         type: 'USER',
                     },
                     {
                         name: 'team-name',
-                        description: 'name of the team',
+                        description: 'Name of the team',
                         type: 'STRING',
                     },
                 ],

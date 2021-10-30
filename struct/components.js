@@ -1,5 +1,6 @@
 const { MessageActionRow, MessageButton, MessageEmbed } = require('discord.js')
 const _ = require('lodash')
+const Util = require('../util/Util')
 
 const {
     THUMBNAIL, MATCH_FOUND_IMAGE, SELECT_MAP, SELECT_SIDE, ATTACKER, DEFENDER,
@@ -251,6 +252,10 @@ class Components {
         return {
             embeds: [playerLeftCompponent, teamInfoComponent],
         }
+    }
+
+    static errorEmbed(message) {
+        return Util.embed().setDescription(`:x: **${message}**`)
     }
 }
 

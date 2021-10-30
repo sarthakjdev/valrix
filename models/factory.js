@@ -34,6 +34,17 @@ class Factory {
     }
 
     /**
+     * Delete team
+     * @param {Team} team
+     * @return {Promise<void>}
+     */
+    async deleteTeam(team) {
+        await knex(TEAM_TABLE).where({ uuid: team.uuid }).del()
+        const { playerIds } = team
+        await knex(PLAYER_TABLE).update({ team: null }).whereIn('id', playerIds)
+    }
+
+    /**
      * Create Valorant player
      * @param {string} id
      * @param {string} valorantId
@@ -88,17 +99,18 @@ class Factory {
 
     /**
      * Remove player from team
-     * @param {string} id
+     * @param {string} playerId
+     * @param {Team} team
      */
     async removePlayer(playerId, team) {
         const [dbPlayer] = await knex(PLAYER_TABLE)
             .where({ id: playerId })
-            .del()
+            .update({ team: null })
             .returning('*')
+        team.removePlayer(playerId)
         dbPlayer.team = team
-        console.log(dbPlayer)
 
-        return team
+        return new Player(dbPlayer)
     }
 
     /**
