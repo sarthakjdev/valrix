@@ -81,7 +81,7 @@ module.exports = [
                         required: true,
                     },
                     {
-                        name: 'valorant-tagline',
+                        name: 'valorant-tag',
                         description: 'Valorant in-game tag. Example 1234 ',
                         type: 'NUMBER',
                         required: true,

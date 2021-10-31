@@ -220,7 +220,7 @@ class Components {
             .addField('Team Name', `${team.name}`)
             .addField('Players', `${team.players.map((player) => `<@${player.id}>`).join('\n')}`, true)
             .setThumbnail(`${THUMBNAIL}`)
-            .setColor('BLACK')
+            .setColor('#125D98')
 
         return teamInfoComponent // haven't returned an object of array because ths funtion has been called in the same class in add/remove player components.
     }
@@ -232,7 +232,7 @@ class Components {
             .setAuthor('GLS Bot', `${THUMBNAIL}`)
             .setDescription(`**${player} has been ${action} ${prep} the team ${team.name} by ${user.id}**`)
             .setThumbnail(`${THUMBNAIL}`)
-            .setColor('BLACK')
+            .setColor('#125D98')
         const teamInfoComponent = this.teamComponents(team)
 
         return {
@@ -246,7 +246,7 @@ class Components {
             .setAuthor('GLS Bot', `${THUMBNAIL}`)
             .setDescription(`**${player} has left the team ${player.team.name}**`)
             .setThumbnail(`${THUMBNAIL}`)
-            .setColor('BLACK')
+            .setColor('#125D98')
         const teamInfoComponent = this.teamComponents(team)
 
         return {
