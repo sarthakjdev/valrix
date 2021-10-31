@@ -69,8 +69,8 @@ module.exports = {
             return interaction.editReply({ embeds: [embed] })
         }
 
-        if (player) await client.factory.updatePlayerTeam(player.id, player.team)
-        await client.factory.createPlayer(playerToAdd.id, valorantPlayer.puuid, valorantPlayer.name, valorantPlayer.tag, playerType, userPlayer.team)
+        if (player) await client.factory.updatePlayerTeam(player.id, userPlayer.team)
+        else await client.factory.createPlayer(playerToAdd.id, valorantPlayer.puuid, valorantPlayer.name, valorantPlayer.tag, playerType, userPlayer.team)
 
         // Need to improve here
         // const playerAddedComponents = Components.teamPlayerComponent(playerToAdd, owner.team, 'added', user)
@@ -95,7 +95,6 @@ module.exports = {
 
             return interaction.editReply({ embeds: [embed] })
         }
-        console.log(client.factory)
         await client.factory.removePlayer(playerToRemove, playerToRemove.team)
         // const playerRemovalComponents = Components.teamPlayerComponent(playerToRemove, owner.team, 'removed', user)
         //
@@ -123,47 +122,31 @@ module.exports = {
     },
     async info(interaction, userPlayer) {
         const { client } = interaction
-        let team
-        const teamsPlayer = interaction.options.get('user')?.value
+
         const teamName = interaction.options.get('team-name')?.value
-
-        if (teamsPlayer) {
-            if (!teamsPlayer.team) {
-                const embed = Components.errorEmbed('Player doesn\'t belong to a team')
-
-                return interaction.editReply({ embeds: [embed] })
-            }
-            const player = await client.factory.getPlayerById(teamsPlayer.id)
-            team = player.team
-        }
-
         if (teamName) {
-            team = teamName
+            const team = await client.factory.getTeamByName(teamName)
+
+            return interaction.editReply(`Team found ${team.name}`)
         }
+        const playerToSearch = interaction.options.getUser('user')
+        const dbPlayerToSearch = await client.factory.getPlayerById(playerToSearch)
 
-        if (!teamsPlayer && !teamName) {
-            // Check if user belong to team
-            if (!userPlayer.team) {
-                const embed = Components.errorEmbed('You doesn\'t belong to a team')
-
-                return interaction.editReply({ embeds: [embed] })
-            }
-            team = userPlayer.team
-        }
-
-        const teamInfo = await client.factory.getTeamByName(team.name)
-        if (!teamInfo) {
-            const embed = Components.errorEmbed('Team doesn\'t exist')
+        const player = dbPlayerToSearch || userPlayer
+        if (!player.team) {
+            const embed = Components.errorEmbed(`<@${player.id}> doesn't belong to any team.`)
 
             return interaction.editReply({ embeds: [embed] })
         }
-        const teamInfoComponents = Components.teamComponents(teamInfo)
 
-        return interaction.editReply({ embeds: [teamInfoComponents] })
+        return interaction.editReply(`Team found ${player.team.name}`)
     },
     async exec(interaction) {
         const { client, user } = interaction
+        await interaction.deferReply()
+
         const userPlayer = await client.factory.getPlayerById(user.id)
+
         // Extract valorant player data
         const valorantName = interaction.options.get('valorant-name')?.value
         const valorantTag = interaction.options.get('valorant-tag')?.value
@@ -179,7 +162,6 @@ module.exports = {
             }
         }
 
-        await interaction.deferReply()
         switch (interaction.options.getSubcommand()) {
             case 'create':
                 return this.create(interaction, userPlayer, valorantPlayer)
