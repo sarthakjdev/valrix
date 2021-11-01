@@ -53,7 +53,7 @@ module.exports = [
                     {
                         name: 'valorant-tag',
                         description: 'Valorant in-game tag. Example 1234',
-                        type: 'NUMBER',
+                        type: 'STRING',
                         required: true,
                     },
                 ],
@@ -83,7 +83,7 @@ module.exports = [
                     {
                         name: 'valorant-tag',
                         description: 'Valorant in-game tag. Example 1234 ',
-                        type: 'NUMBER',
+                        type: 'STRING',
                         required: true,
                     },
                     {

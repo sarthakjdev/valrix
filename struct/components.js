@@ -198,14 +198,15 @@ class Components {
     }
 
     // Components created for team creation:
-    static teamCreated(team) {
+    static teamCreated(team, owner) {
         const teamCreatedComponents = new MessageEmbed()
             .setAuthor('GLS Bot', `${THUMBNAIL}`)
-            .setDescription(`Team created`)
+            .setDescription(` Team has been created. Here is your team information.`)
             .addField('Team Name', `${team.name}`)
+            .addField('Captain', `${owner}`)
             .addField('Players', `${team.players.map((player) => `<@${player.id}>`).join('\n')}`, true)
             .setThumbnail(`${THUMBNAIL}`)
-            .setColor('BLACK')
+            .setColor('125D98')
 
         return {
             embeds: [teamCreatedComponents],
@@ -230,7 +231,7 @@ class Components {
         const prep = (action === 'added') ? 'to' : 'from'
         const playerComponent = new MessageEmbed()
             .setAuthor('GLS Bot', `${THUMBNAIL}`)
-            .setDescription(`**${player} has been ${action} ${prep} the team ${team.name} by ${user.id}**`)
+            .setDescription(`**${player} has been ${action} ${prep} the team '${team.name}' by <@${user.id}>**`)
             .setThumbnail(`${THUMBNAIL}`)
             .setColor('#125D98')
         const teamInfoComponent = this.teamComponents(team)

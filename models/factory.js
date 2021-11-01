@@ -107,6 +107,7 @@ class Factory {
             .where({ id: playerId })
             .update({ team: null })
             .returning('*')
+        console.log(dbPlayer)
         team.removePlayer(playerId)
         dbPlayer.team = team
 
