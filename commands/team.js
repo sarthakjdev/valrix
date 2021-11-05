@@ -73,7 +73,10 @@ module.exports = {
         if (player) await client.factory.updatePlayerTeam(player.id, userPlayer.team)
         else await client.factory.createPlayer(playerToAdd.id, valorantPlayer.puuid, valorantPlayer.name, valorantPlayer.tag, playerType, userPlayer.team)
 
-        const playerAddedComponents = Components.teamPlayerComponent(playerToAdd, userPlayer.team, 'added', userPlayer)
+        const playerRating = await valorantAPI.getPlayerRating(process.env.REGION, valorantPlayer.name, valorantPlayer.tag)
+        console.log(playerRating.elo)
+
+        const playerAddedComponents = await Components.teamPlayerComponent(playerToAdd, userPlayer.team, 'added', userPlayer)
 
         return interaction.editReply(playerAddedComponents)
 

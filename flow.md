@@ -77,7 +77,37 @@
                             2. sending the data to show in website. 
 
 - Now, mechanism to delete channels needed.
-                    
+
+
+- Way to find the initial rating of a team :-
+
+```so here are the steps for calculating initial elo:
+1. Step 1 find rank of all players
+2. Take average of the rank using the given values 
+3. Plug average into this formula: 1700-(400*(1-("rating"/105)))
+```
+
+- Function need to us eteh team rating after a match :-
+
+```
+function eloDiff(team1_elo, team2_elo, team1_score, team2_score) {
+  /*
+  A function for outputting the change in a team1's ELO score.
+
+  team1_elo: The ELO of team 1.
+  team2_elo: The ELO of team 2.
+  team1_score: The score of team 1.
+  team2_score: The score of team 2.
+   */
+  return 30 * (team1_score > team2_score) -
+    1/(10**((team1_elo - team2_elo)/400)+1) *
+    (Math.log(2 * Math.abs(team1_score - team2_score) + 1) * 2.2 /
+    ( team1_score > team2_score ? team1_elo - team2_elo : (team2_elo - team1_elo)*0.001 + 2.2));
+}
+
+console.log(eloDiff(true, 20,  30, 2, 3));
+```
+
 
 
 ## challanges: 

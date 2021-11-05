@@ -241,6 +241,19 @@ class Components {
         }
     }
 
+    // this component has been generated to provide a specific user information:-
+    static playerInfo(player) {
+        const playerInfoComponent = new MessageEmbed()
+            .setAuthor('GLS Bot', `${THUMBNAIL}`)
+            .setDescription(`**Here your player information ${player}**`)
+            .setThumbnail(`${THUMBNAIL}`)
+            .setColor('#125D98')
+
+        return {
+            embeds: [playerInfoComponent],
+        }
+    }
+
     // Components created to be sent on a player leaving a team
     static playerLeftComponent(player, team) {
         const playerLeftCompponent = new MessageEmbed()
@@ -257,6 +270,18 @@ class Components {
 
     static errorEmbed(message) {
         return Util.embed().setDescription(`:x: **${message}**`)
+    }
+
+    static reportMatch() {
+        const reportMatchComponent = new MessageEmbed()
+            .setAuthor('GLS Bot', `${THUMBNAIL}`)
+            .setDescription(`**Congrats! Match has been  reported**`)
+            .setThumbnail(`${THUMBNAIL}`)
+            .setColor('#125D98')
+
+        return {
+            embeds: [reportMatchComponent],
+        }
     }
 }
 

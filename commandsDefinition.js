@@ -134,11 +134,29 @@ module.exports = [
                     },
                 ],
             },
-
         ],
     },
     {
         name: 'report-match-end',
         description: 'To report the ending of the match',
+    },
+    {
+        name: 'player',
+        description: 'get information about user',
+        type: 2,
+        options: [
+            {
+                name: 'info',
+                description: 'get user\'s team',
+                type: 1,
+                options: [
+                    {
+                        name: 'user',
+                        description: 'user whom information you want  (leave empty if want your own)',
+                        type: 'USER',
+                    },
+                ],
+            },
+        ],
     },
 ]
