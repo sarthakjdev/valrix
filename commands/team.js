@@ -150,6 +150,16 @@ module.exports = {
 
         return interaction.editReply({ embeds: [teamInfoComponent] })
     },
+    async rank(interaction, userPlayer) {
+        const { client } = interaction
+        const players = await client.factory.getTeamPlayers(userPlayer.team)
+
+        // calling api to get players rating
+        const playerRatingArray = await players.map((p) => valorantAPI.getPlayerRating(process.env.REGION, p.valorantName, p.valorantTag))
+        console.log(playerRatingArray)
+
+        await interaction.editReply(':white_check_mark: Your team has been staged to rank')
+    },
     async exec(interaction) {
         const { client, user } = interaction
         await interaction.deferReply()
@@ -184,6 +194,8 @@ module.exports = {
                 return this.leave(interaction, userPlayer)
             case 'info':
                 return this.info(interaction, userPlayer)
+            case 'rank':
+                return this.rank(interaction, userPlayer)
             default:
                 return interaction.editReply('Not implemented')
         }

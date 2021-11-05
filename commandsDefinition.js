@@ -134,6 +134,11 @@ module.exports = [
                     },
                 ],
             },
+            {
+                name: 'rank',
+                description: 'stage the team for ranking',
+                type: 1,
+            },
         ],
     },
     {
