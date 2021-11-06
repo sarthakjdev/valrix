@@ -153,11 +153,15 @@ module.exports = {
     async rank(interaction, userPlayer) {
         const { client } = interaction
         const players = await client.factory.getTeamPlayers(userPlayer.team)
-
         // calling api to get players rating
-        const playerRatingArray = await players.map((p) => valorantAPI.getPlayerRating(process.env.REGION, p.valorantName, p.valorantTag))
-        console.log(playerRatingArray)
-
+        const playerRatings = await players.map((p) => valorantAPI.getPlayerRating(process.env.REGION, p.valorantName, p.valorantTag))
+        console.log(playerRatings) // this should return an array of ratings , but it is returning an array of promises
+ 
+        // Calculating team rating to rank on leaderboard :-
+        let sum
+        const average = playerRatings.forEach((rating) => { sum += rating }) / playerRatings.length
+        const teamRating = 1700 - (400 * (1 - (average / 105)))
+        console.log(teamRating)
         await interaction.editReply(':white_check_mark: Your team has been staged to rank')
     },
     async exec(interaction) {

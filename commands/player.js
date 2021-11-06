@@ -4,10 +4,10 @@ const Components = require('../struct/components')
 module.exports = {
     name: 'player',
     async playerInfo(interaction, playerForInfo) {
-        const { client } = interaction
+        const { client, user } = interaction
         const infoPlayer = await client.factory.getPlayerById(playerForInfo)
 
-        const playerInfoComponent = await Components.playerInfo(infoPlayer)
+        const playerInfoComponent = await Components.playerInfo(infoPlayer, user)
         await interaction.editReply(playerInfoComponent)
     },
     async exec(interaction) {
