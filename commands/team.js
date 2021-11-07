@@ -73,14 +73,9 @@ module.exports = {
         if (player) await client.factory.updatePlayerTeam(player.id, userPlayer.team)
         else await client.factory.createPlayer(playerToAdd.id, valorantPlayer.puuid, valorantPlayer.name, valorantPlayer.tag, playerType, userPlayer.team)
 
-        const playerRating = await valorantAPI.getPlayerRating(process.env.REGION, valorantPlayer.name, valorantPlayer.tag)
-        console.log(playerRating.elo)
-
-        const playerAddedComponents = await Components.teamPlayerComponent(playerToAdd, userPlayer.team, 'added', userPlayer)
+        const playerAddedComponents = Components.teamPlayerComponent(playerToAdd, userPlayer.team, 'added', userPlayer)
 
         return interaction.editReply(playerAddedComponents)
-
-        // return interaction.editReply(`${playerToAdd} has been added to team ${userPlayer.team.name}`)
     },
     async remove(interaction, userPlayer) {
         const { client } = interaction
@@ -104,8 +99,6 @@ module.exports = {
         const playerRemovalComponents = Components.teamPlayerComponent(playerToRemove, userPlayer.team, 'removed', userPlayer)
 
         return interaction.editReply(playerRemovalComponents)
-
-        // return interaction.editReply(`Removed player ${playerToRemove}`)
     },
     async leave(interaction, userPlayer) {
         const { client } = interaction
@@ -152,16 +145,17 @@ module.exports = {
     },
     async rank(interaction, userPlayer) {
         const { client } = interaction
+        // Yaha condition process.env.ADMINS.split(',').includes(interaction.user.id)
         const players = await client.factory.getTeamPlayers(userPlayer.team)
         // calling api to get players rating
-        const playerRatings = await players.map((p) => valorantAPI.getPlayerRating(process.env.REGION, p.valorantName, p.valorantTag))
+        const playerRatings = await Promise.all(players.map((p) => valorantAPI.getPlayerRating(process.env.REGION, p.valorantName, p.valorantTag)))
         console.log(playerRatings) // this should return an array of ratings , but it is returning an array of promises
- 
-        // Calculating team rating to rank on leaderboard :-
-        let sum
-        const average = playerRatings.forEach((rating) => { sum += rating }) / playerRatings.length
-        const teamRating = 1700 - (400 * (1 - (average / 105)))
+
+        // Calculating team rating to rank on leaderboard
+        const avg = playerRatings.reduce((sum, player) => player.elo + sum, 0) / playerRatings.length
+        const teamRating = 1700 - (400 * (1 - (avg / 105)))
         console.log(teamRating)
+        // Call team update
         await interaction.editReply(':white_check_mark: Your team has been staged to rank')
     },
     async exec(interaction) {

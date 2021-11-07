@@ -158,6 +158,22 @@ class Factory {
     }
 
     /**
+     * Update team's rating
+     * @param {Team} teamToUpdate
+     * @param {number} rating
+     * @return {Promise<undefined|Team>}
+     */
+    async updateTeamRating(teamToUpdate, rating) {
+        const [dbTeam] = await knex(TEAM_TABLE).where({ uuid: teamToUpdate.uuid }).update({ rating })
+        if (!dbTeam) return undefined
+        const team = new Team(dbTeam)
+        const players = await this.getTeamPlayers(team)
+        team.addPlayers(players)
+
+        return team
+    }
+
+    /**
      * Get players of single team
      * @param {Team} team
      * @return {Promise<*>}

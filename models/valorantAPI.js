@@ -38,7 +38,8 @@ class ValorantAPI {
 
     async getMatchStats(region, name, tag) {
         const playerMatches = await this.getPlayerMatches(region, name, tag)
-        const match = await playerMatches.filter((m) => m.metadata.mode === 'Custom Game')[0]
+        console.log(playerMatches)
+        const match = playerMatches.find((m) => m.metadata.mode === 'Custom Game')
         if (!match) return undefined
 
         return match
