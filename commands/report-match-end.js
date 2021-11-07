@@ -21,7 +21,7 @@ module.exports = {
         if (!match) {
             const embed = Components.errorEmbed('You haven\'t played any custom match recently.')
 
-            return interaction.editReply(embed)
+            return interaction.editReply({ embeds: [embed] })
         }
         const reportMatchComponent = Components.reportMatch()
 

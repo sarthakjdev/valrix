@@ -143,21 +143,6 @@ module.exports = {
 
         return interaction.editReply({ embeds: [teamInfoComponent] })
     },
-    async rank(interaction, userPlayer) {
-        const { client } = interaction
-        // Yaha condition process.env.ADMINS.split(',').includes(interaction.user.id)
-        const players = await client.factory.getTeamPlayers(userPlayer.team)
-        // calling api to get players rating
-        const playerRatings = await Promise.all(players.map((p) => valorantAPI.getPlayerRating(process.env.REGION, p.valorantName, p.valorantTag)))
-        console.log(playerRatings) // this should return an array of ratings , but it is returning an array of promises
-
-        // Calculating team rating to rank on leaderboard
-        const avg = playerRatings.reduce((sum, player) => player.elo + sum, 0) / playerRatings.length
-        const teamRating = 1700 - (400 * (1 - (avg / 105)))
-        console.log(teamRating)
-        // Call team update
-        await interaction.editReply(':white_check_mark: Your team has been staged to rank')
-    },
     async exec(interaction) {
         const { client, user } = interaction
         await interaction.deferReply()
@@ -192,8 +177,6 @@ module.exports = {
                 return this.leave(interaction, userPlayer)
             case 'info':
                 return this.info(interaction, userPlayer)
-            case 'rank':
-                return this.rank(interaction, userPlayer)
             default:
                 return interaction.editReply('Not implemented')
         }

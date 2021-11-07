@@ -113,6 +113,15 @@ class Factory {
         return new Player(dbPlayer)
     }
 
+    // get all registered teams
+    async getRegisteredTeams() {
+        const dbTeams = await knex(TEAM_TABLE)
+            .select('*')
+        if (!dbTeams) return undefined
+
+        return dbTeams
+    }
+
     /**
      * Get team by team uuid
      * @param {string} uuid

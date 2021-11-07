@@ -243,14 +243,13 @@ class Components {
 
     // this component has been generated to provide a specific user information:-
     static playerInfo(player, user) {
-        console.log(player)
         const playerInfoComponent = new MessageEmbed()
             .setAuthor('GLS Bot', `${THUMBNAIL}`)
-            .setDescription(`**Here your player information ${user.id}**`)
+            .setDescription(`**Here your player information <@${user.id}>**`)
             .addField('Player:', `<@${player.id}>`)
-            .addField('Valorant Game Name: :', player.valorantName)
-            .addField('Valorant Game Name: :', player.valorantTag)
-            .addField('Team Name: :', player.team.name)
+            .addField('Valorant Game Name: :', `${player.tag}`)
+            .addField('Valorant Game Name: :', `${player.name}`)
+            .addField('Team Name: :', `${player.team.name}`)
             .setThumbnail(`${THUMBNAIL}`)
             .setColor('#125D98')
 

@@ -134,16 +134,22 @@ module.exports = [
                     },
                 ],
             },
-            {
-                name: 'rank',
-                description: 'stage the team for ranking',
-                type: 1,
-            },
         ],
     },
     {
         name: 'report-match-end',
         description: 'To report the ending of the match',
+    },
+    {
+        name: 'stage-teams',
+        description: 'staging teams for ranking',
+        options: [
+            {
+                name: 'onwer',
+                description: 'owner of the team to be staged { only if, to stage particular teams}',
+                type: 'USER',
+            },
+        ],
     },
     {
         name: 'player',
