@@ -115,11 +115,18 @@ class Factory {
 
     // get all registered teams
     async getRegisteredTeams() {
-        const dbTeams = await knex(TEAM_TABLE)
-            .select('*')
-        if (!dbTeams) return undefined
+        const dbTeams = await knex(TEAM_TABLE).select('*')
 
-        return dbTeams
+        let teams = dbTeams.map((dbTeam) => new Team(dbTeam))
+
+        teams = await Promise.all(teams.map(async (team) => {
+            const players = await this.getTeamPlayers(team)
+            team.addPlayers(players)
+
+            return team
+        }))
+
+        return teams
     }
 
     /**
