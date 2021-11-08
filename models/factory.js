@@ -180,7 +180,7 @@ class Factory {
      * @return {Promise<undefined|Team>}
      */
     async updateTeamRating(teamToUpdate, rating) {
-        const [dbTeam] = await knex(TEAM_TABLE).where({ uuid: teamToUpdate.uuid }).update({ rating })
+        const [dbTeam] = await knex(TEAM_TABLE).where({ uuid: teamToUpdate.uuid }).update({ rating }).returning('*')
         if (!dbTeam) return undefined
         const team = new Team(dbTeam)
         const players = await this.getTeamPlayers(team)
@@ -197,7 +197,7 @@ class Factory {
     async getTeamPlayers(team) {
         const players = await knex(PLAYER_TABLE).where({ team: team.uuid })
 
-        return players.map((p) => ({ ...p, team }))
+        return players.map((p) => ({ ...p, team })).map((p) => new Player(p))
     }
 }
 
