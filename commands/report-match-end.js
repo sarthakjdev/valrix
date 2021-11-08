@@ -17,7 +17,7 @@ module.exports = {
         }
         // const playerMatches = await valorantAPI.getPlayerMatches(process.env.REGION, userPlayer.name, userPlayer.tag)
 
-        const match = await valorantAPI.getMatchStats(process.env.REGION, userPlayer.name, userPlayer.tag)
+        const match = await valorantAPI.getPlayerLastMatch(userPlayer.name, userPlayer.tag)
         if (!match) {
             const embed = Components.errorEmbed('You haven\'t played any custom match recently.')
 

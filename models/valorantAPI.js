@@ -16,9 +16,9 @@ class ValorantAPI {
         }
     }
 
-    async getPlayerRating(region, name, tag) {
+    async getPlayerRating(name, tag) {
         try {
-            const { data: { data } } = await this.axios.get(`/valorant/v1/mmr/${region}/${name}/${tag}`)
+            const { data: { data } } = await this.axios.get(`/valorant/v1/mmr/${this.region}/${name}/${tag}`)
 
             return data
         } catch (err) {
@@ -26,22 +26,14 @@ class ValorantAPI {
         }
     }
 
-    async getPlayerMatches(region, name, tag) {
+    async getPlayerLastMatch(name, tag, mode = 'Custom Game') {
         try {
-            const { data: { data } } = await this.axios.get(`/valorant/v3/matches/${region}/${name}/${tag}`)
+            const { data: { data } } = await this.axios.get(`/valorant/v3/matches/${this.region}/${name}/${tag}`)
 
-            return data
+            return data.find((m) => m.metadata.mode === mode)
         } catch (err) {
             return undefined
         }
-    }
-
-    async getMatchStats(region, name, tag) {
-        const playerMatches = await this.getPlayerMatches(region, name, tag)
-        const match = playerMatches.find((m) => m.metadata.mode === 'Custom Game')
-        if (!match) return undefined
-
-        return match
     }
 }
 
