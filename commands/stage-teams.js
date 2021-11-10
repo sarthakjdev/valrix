@@ -1,5 +1,6 @@
 /* eslint-disable no-restricted-syntax,no-await-in-loop */
 const valorantAPI = require('../models/valorantAPI')
+const Components = require('../struct/components')
 
 module.exports = {
     name: 'stage-teams',
@@ -12,8 +13,9 @@ module.exports = {
         const teamsToStage = teams.filter((team) => team.players.length >= 5 && team.rating === 0)
 
         if (!teamsToStage.length) {
-            // TODO : Add embed here
-            return interaction.editReply('No teams to stage')
+            const embed = Components.errorEmbed('No teams to stage')
+
+            return interaction.editReply({ embeds: [embed] })
         }
 
         for (const team of teamsToStage) {
@@ -24,7 +26,8 @@ module.exports = {
             await client.factory.updateTeamRating(team, rating)
         }
 
-        // TODO : Update embed here
-        return interaction.editReply(teamsToStage.map((t) => t.name).join(' | '))
+        const stagedTeamComponent = Components.teamsStaged(teamsToStage)
+
+        return interaction.editReply(stagedTeamComponent)
     },
 }

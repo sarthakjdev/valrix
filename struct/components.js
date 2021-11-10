@@ -276,15 +276,28 @@ class Components {
         return Util.embed().setDescription(`:x: **${message}**`)
     }
 
-    static reportMatch() {
+    static reportMatch(ratingCalculated, updatedRating) {
         const reportMatchComponent = new MessageEmbed()
             .setAuthor('GLS Bot', `${THUMBNAIL}`)
-            .setDescription(`**Congrats! Match has been  reported**`)
+            .setDescription(`**Congrats! Match has been  reported** \n You gained/lost ${ratingCalculated} from this match \n Your updated rank in the leadreboard is ${updatedRating}`)
             .setThumbnail(`${THUMBNAIL}`)
             .setColor('#125D98')
 
         return {
             embeds: [reportMatchComponent],
+        }
+    }
+
+    static teamsStaged(stagedTeams) {
+        const teamStagedComponents = new MessageEmbed()
+            .setAuthor('GLS Bot', `${THUMBNAIL}`)
+            .setDescription(`**All eligible teams has been staged for ranking**`)
+            .addField('List of teeam Staged:', `${stagedTeams.map((t) => t.name).join('\n')}`)
+            .setThumbnail(`${THUMBNAIL}`)
+            .setColor('#125D98')
+
+        return {
+            embeds: [teamStagedComponents],
         }
     }
 }

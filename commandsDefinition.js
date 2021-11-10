@@ -143,13 +143,6 @@ module.exports = [
     {
         name: 'stage-teams',
         description: 'staging teams for ranking',
-        options: [
-            {
-                name: 'onwer',
-                description: 'owner of the team to be staged { only if, to stage particular teams}',
-                type: 'USER',
-            },
-        ],
     },
     {
         name: 'player',
