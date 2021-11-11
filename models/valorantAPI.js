@@ -30,7 +30,9 @@ class ValorantAPI {
         try {
             const { data: { data } } = await this.axios.get(`/valorant/v3/matches/${this.region}/${name}/${tag}`)
 
-            return data.find((m) => m.metadata.mode === mode)
+            if (!data.length) return undefined
+
+            return data[0].metadata.mode === mode ? data[0] : undefined
         } catch (err) {
             return undefined
         }

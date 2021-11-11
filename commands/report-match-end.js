@@ -1,7 +1,6 @@
 const valorantAPI = require('../models/valorantAPI')
 const Components = require('../struct/components')
 
-
 module.exports = {
     name: 'report-match-end',
     async getTeamRating(interaction, player) {
@@ -36,36 +35,39 @@ module.exports = {
             return interaction.editReply({ embeds: [embed] })
         }
 
-        const matches = await valorantAPI.getPlayerLastMatch(userPlayer.name, userPlayer.tag)
-        if (!matches) {
+        const match = await valorantAPI.getPlayerLastMatch(userPlayer.name, userPlayer.tag)
+        if (!match) {
             const embed = Components.errorEmbed('You haven\'t played any custom match recently.')
 
             return interaction.editReply({ embeds: [embed] })
         }
-        const requiredMatch = matches[0]
-        // finding userplayer team colour
-        const userPlayerTeamColour = await requiredMatch.players.all_players.find((p) => p.tag === userPlayer.tag).team.toLowerCase()
-        const opponentTeamColour = await userPlayerTeamColour === 'red' ? 'blue' : 'red'
 
-        const team1DbRating = await userPlayer.team.rating
-        const team2DbRating = await requiredMatch.players.blue[0]
+        const userTeam = match.players.red.find((p) => p.puuid === userPlayer.valorantId) ? 'red' : 'blue'
 
-        // finding both teams players scores arrays
-        const redTeamPlayerScores = await requiredMatch.players.red.map((p) => p.stats.score)
-        const blueTeamPlayerScores = await requiredMatch.players.blue.map((p) => p.stats.score)
+        // const requiredMatch = matches[0]
+        // // finding userplayer team colour
+        // const userPlayerTeamColour = requiredMatch.players.all_players.find((p) => p.tag === userPlayer.tag).team.toLowerCase()
+        // const opponentTeamColour = userPlayerTeamColour === 'red' ? 'blue' : 'red'
+        //
+        // const team1DbRating = userPlayer.team.rating
+        // const team2DbRating = requiredMatch.players.blue[0]
+        //
+        // // finding both teams players scores arrays
+        // const redTeamPlayerScores = requiredMatch.players.red.map((p) => p.stats.score)
+        // const blueTeamPlayerScores = requiredMatch.players.blue.map((p) => p.stats.score)
+        //
+        // // finding average of both the team to be used as team scores :
+        // const redTeamAvg = redTeamPlayerScores.reduce((sum, player) => sum + player.elo, 0) / redTeamPlayerScores.length
+        // const blueTeamAvg = blueTeamPlayerScores.reduce((sum, player) => sum + player.elo, 0) / blueTeamPlayerScores.length
+        //
+        // const team1Score = userPlayerTeamColour === 'red' ? redTeamAvg : blueTeamAvg
+        // const team2Score = opponentTeamColour === 'blue' ? blueTeamAvg : redTeamAvg
+        //
+        // const ratingCalculated = await this.calcRating(team1Score, team2Score, team1DbRating, team2DbRating)
+        // const updatedTeamRating = team1DbRating + ratingCalculated
+        // await client.factory.updateTeamRating(userPlayer.team)
+        // const reportMatchComponent = Components.reportMatch(ratingCalculated, updatedTeamRating)
 
-        // findng avaerage of both the team to be used as team scores :
-        const redTeamAvg = redTeamPlayerScores.reduce((sum, player) => sum + player.elo, 0) / redTeamPlayerScores.length
-        const blueTeamAvg = blueTeamPlayerScores.reduce((sum, player) => sum + player.elo, 0) / blueTeamPlayerScores.length
-
-        const team1Score = userPlayerTeamColour === 'red' ? redTeamAvg : blueTeamAvg
-        const team2Score = opponentTeamColour === 'blue' ? blueTeamAvg : redTeamAvg
-
-        const ratingCalculated = await this.calcRating(team1Score, team2Score, team1DbRating, team2DbRating)
-        const updatedTeamRating = await team1DbRating + ratingCalculated
-        await client.factory.updateTeamRating(userPlayer.team)
-        const reportMatchComponent = Components.reportMatch(ratingCalculated, updatedTeamRating)
-
-        return interaction.editReply(reportMatchComponent)
+        return interaction.editReply('Hi')
     },
 }

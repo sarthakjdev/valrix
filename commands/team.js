@@ -15,7 +15,7 @@ module.exports = {
         if (team) {
             const embed = Components.errorEmbed(`Team already exist with same name`)
 
-            return interaction.editReply(embed)
+            return interaction.editReply({ embeds: [embed] })
         }
 
         // Create new team
@@ -133,7 +133,7 @@ module.exports = {
         const dbPlayerToSearch = await client.factory.getPlayerById(playerToSearch)
 
         const player = dbPlayerToSearch || userPlayer
-        if (!player.team) {
+        if (!player || !player.team) {
             const embed = Components.errorEmbed(`<@${player.id}> doesn't belong to any team.`)
 
             return interaction.editReply({ embeds: [embed] })

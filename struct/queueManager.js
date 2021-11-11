@@ -5,7 +5,7 @@ const Components = require('./components')
 class QueueManager {
     constructor(opts) {
         this.client = opts.client
-        this.queueSize = 4
+        this.queueSize = 2
         this.queue = new Collection()
     }
 
@@ -38,9 +38,9 @@ class QueueManager {
     async processQueue() {
         this.queue.sweep((interaction) => Date.now() - interaction.createdTimestamp > 900000) // Remove interactions older than 15 minutes because we can't update them
         if (this.queue.size >= this.queueSize) {
-            this.queueCopy = this.queue.clone()
+            const queueCopy = this.queue.clone()
             this.queue = new Collection()
-            await createMatch(this.queueCopy)
+            await createMatch(queueCopy)
         }
     }
 }

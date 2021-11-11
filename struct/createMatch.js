@@ -1,65 +1,44 @@
-const { Permissions, MessageButton } = require('discord.js')
-const pWaitFor = require('../util/pWaitFor')
+const { Permissions } = require('discord.js')
 const Components = require('./components')
+const pWaitFor = require('../util/pWaitFor')
 
-const CATEGORY_NAME = 'Valorant'
 const CHAT_CHANNEL_NAME = 'Chat Here'
 const GAME_SETTINGS_CHANNEL_NAME = 'Game Settings'
 const VOICE_CHANNEL_NAME = 'Check-In'
-const TEAM1_VOICE_CHANNEL_NAME = 'Team A'
-const TEAM2_VOICE_CHANNEL_NAME = 'Team B'
 
-const createMatch = async (playerButtons) => {
-    const users = playerButtons.map((bi) => ({
-        id: bi.user.id,
-        tag: bi.user.tag,
-        mention: `<@${bi.user.id}>`,
-        permissions: {
-            id: bi.user.id,
-            allow: [Permissions.FLAGS.SEND_MESSAGES, Permissions.FLAGS.CONNECT, Permissions.FLAGS.VIEW_CHANNEL],
-            deny: [Permissions.FLAGS.ADD_REACTIONS],
-        },
-        readOnlyPermission: {
-            id: bi.user.id,
-            deny: [Permissions.FLAGS.SEND_MESSAGES],
-        },
-        voiceDenyPermission: {
-            id: bi.user.id,
-            deny: [Permissions.FLAGS.CONNECT],
-        },
-        voiceAllowPermission: {
-            id: bi.user.id,
-            allow: [Permissions.FLAGS.CONNECT],
-        },
-        viewChannelPermission: {
-            id: bi.user.id,
-            allow: [Permissions.FLAGS.VIEW_CHANNEL],
-        },
-        button: new MessageButton().setCustomId(bi.user.id)
-            .setLabel(bi.user.tag)
-            .setStyle('SECONDARY'),
-    }))
+const createMatch = async (interactions) => {
+    const owners = await Promise.all(interactions.map(async (i) => i.client.factory.getPlayerById(i.user.id)))
 
-    const { channels, members } = playerButtons.first().guild
+    const teamOwner1 = owners[0]
+    const teamOwner2 = owners[1]
+    const players = [...teamOwner1.team.players, ...teamOwner2.team.players]
+
+    await Promise.all(players.map((p) => interactions.first().client.users.fetch(p.id)))
+
+    const { channels, members } = interactions.first().guild
+
+    const categoryName = `${teamOwner1.team.name} vs ${teamOwner2.team.name}`
 
     // Create category channel
-    const category = await channels.create(CATEGORY_NAME, {
+    const category = await channels.create(categoryName, {
         type: 'GUILD_CATEGORY',
         permissionOverwrites: [{
             id: channels.guild.id,
             deny: [Permissions.FLAGS.SEND_MESSAGES, Permissions.FLAGS.CONNECT, Permissions.FLAGS.VIEW_CHANNEL],
-        }, ...users.map((user) => user.permissions)],
+        },
+        ...players.map((p) => p.permissions)],
     })
 
-    // Create chat channel
-    const chatChannel = await channels.create(CHAT_CHANNEL_NAME, { type: 'GUILD_TEXT', parent: category })
+    await channels.create(CHAT_CHANNEL_NAME, { type: 'GUILD_TEXT', parent: category })
+
     // Create game settings channel and create invite link
     const gameSettingsChannel = await channels.create(GAME_SETTINGS_CHANNEL_NAME, {
         type: 'GUILD_TEXT',
         permissionOverwrites: [{
             id: channels.guild.id,
             deny: [Permissions.FLAGS.VIEW_CHANNEL],
-        }, ...users.map((user) => user.viewChannelPermission)],
+        },
+        ...players.map((p) => p.viewChannelPermission)],
         parent: category,
     })
     const gameSettingsInvite = await gameSettingsChannel.createInvite()
@@ -67,7 +46,7 @@ const createMatch = async (playerButtons) => {
     // Create voice channel and invite
     const checkIn = await channels.create(VOICE_CHANNEL_NAME, {
         type: 'GUILD_VOICE',
-        userLimit: playerButtons.size,
+        userLimit: 2,
         parent: category,
     })
     const checkInInvite = await checkIn.createInvite()
@@ -75,71 +54,38 @@ const createMatch = async (playerButtons) => {
     const { joinGameEmbed, joinGameRow } = Components.getJoinGame(gameSettingsInvite.url)
     const { checkInEmbed, checkInRow } = Components.getCheckInRow(checkInInvite.url)
 
-    await Promise.all(playerButtons.map(async (pb) => pb.editReply({ embeds: [joinGameEmbed], components: [joinGameRow] })))
+    await Promise.all(interactions.map(async (pb) => pb.editReply({ embeds: [joinGameEmbed], components: [joinGameRow] })))
 
     await gameSettingsChannel.send({
-        content: ` ${users.map((u) => u.mention).toString()}  \n Check-in to continue the process.`,
+        content: ` ${players.map((u) => u.mention).toString()}  \n Check-in to continue the process.`,
         embeds: [checkInEmbed],
         components: [checkInRow],
     })
 
     await pWaitFor(() => checkIn.full)
 
-    const team1 = []
-    const team2 = []
-    // eslint-disable-next-line prefer-const
-    let [cap1, cap2, ...remainingPlayers] = users
-    let turn = cap1
-    const selectionBoardMessage = Components.genSelectionBoard(cap1, cap2, team1, team2, remainingPlayers, turn)
-    const gameSettingsMsg = await gameSettingsChannel.send(selectionBoardMessage)
-
-    const teamSelectionCollector = gameSettingsMsg.createMessageComponentCollector({ componentType: 'BUTTON' })
-    teamSelectionCollector.on('collect', async (buttonInteraction) => {
-        if (buttonInteraction.user.id !== turn.id) {
-            return buttonInteraction.reply({ content: `You're not allowed to click button`, ephemeral: true })
-        } if (turn.id === cap1.id) {
-            const selectedPlayer = remainingPlayers.find((player) => player.id === buttonInteraction.customId)
-            team1.push(selectedPlayer)
-            turn = cap2
-            await buttonInteraction.reply({ content: `You have selected ${selectedPlayer.mention}`, ephemeral: true })
-        } else {
-            const selectedPlayer = remainingPlayers.find((player) => player.id === buttonInteraction.customId)
-            team2.push(selectedPlayer)
-            turn = cap1
-            await buttonInteraction.reply({ content: `You have selected ${selectedPlayer.mention}`, ephemeral: true })
-        }
-        remainingPlayers = remainingPlayers.filter((player) => player.id !== buttonInteraction.customId)
-        const updatedGameSettingMsg = Components.genSelectionBoard(cap1, cap2, team1, team2, remainingPlayers, turn)
-        if (!remainingPlayers.length) teamSelectionCollector.stop()
-
-        return gameSettingsMsg.edit(updatedGameSettingMsg)
-    })
-
-    await pWaitFor(() => !remainingPlayers.length)
-
-    team1.push(cap1)
-    team2.push(cap2)
-    const team1VoiceChannel = await channels.create(TEAM1_VOICE_CHANNEL_NAME, {
+    const team1VoiceChannel = await channels.create(teamOwner1.team.name, {
         type: 'GUILD_VOICE',
-        userLimit: team1.length,
+        userLimit: teamOwner1.team.players.length,
         parent: category,
         permissionOverwrites: [{
             id: channels.guild.id,
             deny: [Permissions.FLAGS.VIEW_CHANNEL],
-        }, ...team1.map((user) => user.voiceAllowPermission)],
+        }, ...teamOwner1.team.players.map((user) => user.voiceAllowPermission)],
     })
-    const team2VoiceChannel = await channels.create(TEAM2_VOICE_CHANNEL_NAME, {
+
+    const team2VoiceChannel = await channels.create(teamOwner2.team.name, {
         type: 'GUILD_VOICE',
-        userLimit: team2.length,
+        userLimit: teamOwner1.team.players.length,
         parent: category,
         permissionOverwrites: [{
             id: channels.guild.id,
             deny: [Permissions.FLAGS.VIEW_CHANNEL],
-        }, ...team2.map((user) => user.voiceAllowPermission)],
+        }, ...teamOwner2.team.players.map((user) => user.voiceAllowPermission)],
     })
 
-    const team1Members = team1.map((player) => members.cache.get(player.id))
-    const team2Members = team2.map((player) => members.cache.get(player.id))
+    const team1Members = teamOwner1.team.players.map((player) => members.cache.get(player.id))
+    const team2Members = teamOwner2.team.players.map((player) => members.cache.get(player.id))
 
     await Promise.all(team1Members.map(async (player) => {
         if (player.voice) await player.voice.setChannel(team1VoiceChannel)
@@ -150,6 +96,8 @@ const createMatch = async (playerButtons) => {
     }))
 
     await checkIn.delete()
+
+    let turn = members.cache.get(teamOwner1.id)
 
     let maps = ['Bind', 'Haven', 'Split', 'Ascent', 'Icebox', 'Breeze', 'Fracture']
 
@@ -168,11 +116,11 @@ const createMatch = async (playerButtons) => {
         if (buttonInteraction.user.id !== turn.id) {
             return buttonInteraction.reply({ content: `You're not allowed to click button`, ephemeral: true })
         }
-        if (turn.id === cap1.id) {
-            turn = cap2
+        if (turn.id === teamOwner1.id) {
+            turn = teamOwner2
             await buttonInteraction.reply({ content: `You have ${actiontaken} ${buttonInteraction.customId}`, ephemeral: true })
         } else {
-            turn = cap1
+            turn = teamOwner1
             await buttonInteraction.reply({ content: `You have ${actiontaken} ${buttonInteraction.customId}`, ephemeral: true })
         }
         maps = maps.filter((map) => map !== buttonInteraction.customId)
@@ -182,7 +130,7 @@ const createMatch = async (playerButtons) => {
             updatedGameSettingMsg = Components.genMapBoard(['Attacker', 'Defender'], turn)
         }
         if (maps.length === 1 && ['Attacker', 'Defender'].includes(buttonInteraction.customId)) {
-            updatedGameSettingMsg = Components.genMapBoard([], null, buttonInteraction, cap1, cap2)
+            updatedGameSettingMsg = Components.genMapBoard([], null, buttonInteraction, teamOwner1, teamOwner2)
         }
 
         return mapSelectionMsg.edit(updatedGameSettingMsg)

@@ -31,6 +31,10 @@ class Team {
         return this.owner?.id
     }
 
+    get qualified() {
+        return this.players.length > 4 && this.rating !== 0
+    }
+
     removePlayer(playerId) {
         this._players = this._players.filter((p) => p.id !== playerId)
     }
