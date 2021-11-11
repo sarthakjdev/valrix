@@ -129,6 +129,13 @@ class Factory {
         return teams
     }
 
+    // returing all teams owmers
+    async getOwners() {
+        const dbPlayers = await knex(PLAYER_TABLE).where({ status: 'OWNER' }).returning('*')
+
+        return dbPlayers
+    }
+
     /**
      * Get team by team uuid
      * @param {string} uuid

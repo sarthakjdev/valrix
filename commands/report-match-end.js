@@ -1,16 +1,17 @@
 const valorantAPI = require('../models/valorantAPI')
 const Components = require('../struct/components')
 
+
 module.exports = {
     name: 'report-match-end',
     async getTeamRating(interaction, player) {
         const { client } = interaction
         const dbPlayer = await client.factory.getPlayerById(player.id)
-        const team = await client.factory.getTeamByName(dbPlayer.name)
+        const dbTeam = await client.factory.getTeamByName(dbPlayer.name)
 
-        return team.rating
+        return dbTeam.rating
     },
-    // function to be used for calculating rating after a match ends : 
+    // function to be used for calculating rating after a match ends :
     // async calcRating(team1Elo, team2Elo, team1Score, team2Score) {
     //     /*
     //         A function for outputting the change in a team1's ELO score.
@@ -19,9 +20,9 @@ module.exports = {
     //         team1_score: The score of team 1.
     //         team2_score: The score of team 2.
     //          */
-    //     return 30 * (team1Score > team2Score) - 1 / (10 ** ((team1Elo - team2Elo) / 400) + 1)
-    //           * (Math.log(2 * Math.abs(team1Elo - team2Elo) + 1) * 2.2
-    //           / (team1Score > team2Score ? team1Elo - team2Elo : (team2Elo - team1Elo) * 0.001 + 2.2))
+    //     return 30 * (team1Score > team2Score)
+    // - ((1 / 10) * (((team - team2Elo) / 400) + 1)
+    // * (Math.log(2 * Math.abs(team1Score - team2Score) + 1) * 2.2) / (team1Score > team2Score ? team - team2Elo : ((team2Elo - team) * 0.001 + 2.2)))
     // },
     async exec(interaction) {
         const { client, user } = interaction

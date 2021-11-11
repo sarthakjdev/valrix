@@ -7,7 +7,14 @@ const queueComponents = Components.getQueue()
 module.exports = {
     name: 'gsq',
     exec: async (interaction) => {
-        // Send Initial reply
+        const { client } = interaction
+        // check whether the command user is admin or not
+        if (!process.env.ADMINS.split(',').includes(interaction.user.id)) {
+            const embed = Components.errorEmbed('You are not admin of this server to use this command')
+
+            return interaction.reply({ embeds: [embed] })
+        }
+
         await interaction.reply({
             embeds: [startMsgComponents.startPlayingEmbed],
             components: [startMsgComponents.startPlayingRow],
@@ -19,6 +26,15 @@ module.exports = {
         })
 
         playingCollector.on('collect', async (playingButtonInteraction) => {
+            // check whethere the user is owner of a team or not.
+            const owners = await client.factory.getOwners()
+            console.log(!owners.map((o) => Number(o.id) === Number(playingButtonInteraction.user.id)))
+            console.log(playingButtonInteraction.user.id)
+            if (owners.map((o) => o.id === playingButtonInteraction.user.id)) {
+                const embed = Components.errorEmbed('You are not a captain of a team to search for a queue')
+
+                return playingButtonInteraction.reply({ embeds: [embed] })
+            }
             if (interaction.client.queueManager.isQueued(playingButtonInteraction.user.id)) {
                 await playingButtonInteraction.reply({
                     content: `You're already queued`,
