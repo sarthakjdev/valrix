@@ -276,6 +276,14 @@ class Components {
         return Util.embed().setDescription(`:x: **${message}**`)
     }
 
+    static successEmbed(message) {
+        const embed = new MessageEmbed()
+            .setColor('#125D98')
+            .setDescription(message)
+
+        return embed
+    }
+
     static reportMatch(ratingCalculated, updatedRating) {
         const reportMatchComponent = new MessageEmbed()
             .setAuthor('GLS Bot', `${THUMBNAIL}`)

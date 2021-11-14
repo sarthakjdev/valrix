@@ -29,6 +29,24 @@ module.exports = [
         ],
     },
     {
+        name: 'register',
+        description: 'register yourself with your valorant account',
+        options: [
+            {
+                name: 'valorant-name',
+                description: 'Valorant in-game name. Example Hiro',
+                type: 'STRING',
+                required: true,
+            },
+            {
+                name: 'valorant-tag',
+                description: 'Valorant in-game tag. Example 1234',
+                type: 'STRING',
+                required: true,
+            },
+        ],
+    },
+    {
         name: 'team',
         description: 'operate team for league',
         type: 2,
@@ -41,18 +59,6 @@ module.exports = [
                     {
                         name: 'name',
                         description: 'name of the team',
-                        type: 'STRING',
-                        required: true,
-                    },
-                    {
-                        name: 'valorant-name',
-                        description: 'Valorant in-game name. Example Hiro',
-                        type: 'STRING',
-                        required: true,
-                    },
-                    {
-                        name: 'valorant-tag',
-                        description: 'Valorant in-game tag. Example 1234',
                         type: 'STRING',
                         required: true,
                     },
@@ -72,18 +78,6 @@ module.exports = [
                         name: 'user',
                         description: 'User to be added in your team',
                         type: 'USER',
-                        required: true,
-                    },
-                    {
-                        name: 'valorant-name',
-                        description: 'Valorant in-game name. Example Hiro',
-                        type: 'STRING',
-                        required: true,
-                    },
-                    {
-                        name: 'valorant-tag',
-                        description: 'Valorant in-game tag. Example 1234 ',
-                        type: 'STRING',
                         required: true,
                     },
                     {

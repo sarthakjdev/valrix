@@ -118,3 +118,9 @@ console.log(eloDiff(true, 20,  30, 2, 3));
 
 > Can we use players own mmr alloted by valorant iself for matchmaking purpose, instead of using our ranks, that would be more feasible and conveninet way. 
 
+
+
+# BUGS 
+
+ -After team plater being added, it doesnt updates the mssg properly.
+ - It sends three four 

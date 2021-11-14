@@ -1,15 +1,30 @@
-const valorantAPI = require('../models/valorantAPI')
 const Components = require('../struct/components')
+const valorantAPI = require('../models/valorantAPI')
 
 module.exports = {
     name: 'team',
-    async create(interaction, userPlayer, valorantPlayer) {
+    async create(interaction, userPlayer) {
         const { client, user } = interaction
         const teamName = interaction.options.get('name').value
-        const valorantName = interaction.options.get('valorant-name').value
-        const valorantTag = interaction.options.get('valorant-tag').value
+
+        const valorantPlayer = await client.factory.getPlayerById(user.id)
+        console.log('valorantPlayer ', valorantPlayer)
+
+        if (!valorantPlayer) {
+            const embed = Components.errorEmbed('You have not registered your valorant account yet. Do register it by using /register')
+
+            return interaction.editReply({ embeds: [embed] })
+        }
+
+        const valorantName = valorantPlayer.name
+        const valorantTag = valorantPlayer.tag
         // Check if player is already in any team
-        if (userPlayer && userPlayer.team) return interaction.editReply(`Player already exist for team ${userPlayer.team.name}`)
+        if (userPlayer && userPlayer.team) {
+            const embed = Components.errorEmbed(`Player already exist in team ${userPlayer.team}`)
+
+            return interaction.editReply({ embeds: [embed] })
+        }
+
         // Check for team name
         let team = await client.factory.getTeamByName(teamName)
         if (team) {
@@ -40,12 +55,12 @@ module.exports = {
 
         return interaction.editReply(`Team deleted successfully`)
     },
-    async add(interaction, userPlayer, valorantPlayer) {
+    async add(interaction, userPlayer) {
         const { client } = interaction
 
         const playerType = interaction.options.get('player-type').value || 'SUB'
         const playerToAdd = interaction.options.getUser('user')
-
+        // const valorantPlayer = await client.factory.getPlayerById(playerToAdd.id)
         // Check if user is owner
         if (!userPlayer || !userPlayer.team || userPlayer.team.ownerId !== userPlayer.id) {
             const embed = Components.errorEmbed(`You're not owner of any team`)
@@ -71,9 +86,10 @@ module.exports = {
         }
 
         if (player) await client.factory.updatePlayerTeam(player.id, userPlayer.team)
-        else await client.factory.createPlayer(playerToAdd.id, valorantPlayer.puuid, valorantPlayer.name, valorantPlayer.tag, playerType, userPlayer.team)
+        else await client.factory.createPlayer(playerToAdd.id, player.puuid, player.name, player.tag, playerType, userPlayer.team)
 
-        const playerAddedComponents = Components.teamPlayerComponent(playerToAdd, userPlayer.team, 'added', userPlayer)
+        const userPlayerTeam = await client.factory.getTeamByName(userPlayer.team)
+        const playerAddedComponents = Components.teamPlayerComponent(playerToAdd, userPlayerTeam, 'added', userPlayer)
 
         return interaction.editReply(playerAddedComponents)
     },
@@ -166,7 +182,7 @@ module.exports = {
 
         switch (interaction.options.getSubcommand()) {
             case 'create':
-                return this.create(interaction, userPlayer, valorantPlayer)
+                return this.create(interaction, userPlayer)
             case 'delete':
                 return this.delete(interaction, userPlayer)
             case 'add':

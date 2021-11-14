@@ -20,29 +20,33 @@ module.exports = {
             filter: filterPlayingButton,
         })
 
-        playingCollector.on('collect', async (buuttonInteraction) => {
+        playingCollector.on('collect', async (buttonInteraction) => {
             // check whether the user is owner of a team or not.
             const owners = await client.factory.getOwners()
             const ownerIds = owners.map((o) => o.id)
-            if (!ownerIds.includes(buuttonInteraction.user.id)) {
+            if (!ownerIds.includes(buttonInteraction.user.id)) {
                 // TODO: Throw better error
-                return buuttonInteraction.reply(`You're not ziggy's friend`)
+                const embed = Components.errorEmbed('You are not a captain of a team to search for queue.')
+
+                return buttonInteraction.reply({ embeds: [embed] })
             }
 
             // Check if owner's team have enough players
-            const userPlayer = await client.factory.getPlayerById(buuttonInteraction.user.id)
+            const userPlayer = await client.factory.getPlayerById(buttonInteraction.user.id)
             if (!userPlayer.team.qualified) {
-                return buuttonInteraction.reply('Not enough players or your team is not staged')
+                const embed = Components.errorEmbed('Your team doesn\'t have enough players to search for queue.')
+
+                return buttonInteraction.reply({ embeds: [embed] })
             }
 
-            if (interaction.client.queueManager.isQueued(buuttonInteraction.user.id)) {
-                return buuttonInteraction.reply({
+            if (interaction.client.queueManager.isQueued(buttonInteraction.user.id)) {
+                return buttonInteraction.reply({
                     content: `You're already queued`,
                     ephemeral: true,
                 })
             }
 
-            return buuttonInteraction.reply({
+            return buttonInteraction.reply({
                 components: [queueComponents.queuePlayingRow],
                 embeds: [queueComponents.queuePlayingEmbed],
                 ephemeral: true,

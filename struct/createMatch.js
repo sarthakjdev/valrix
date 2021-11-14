@@ -46,7 +46,7 @@ const createMatch = async (interactions) => {
     // Create voice channel and invite
     const checkIn = await channels.create(VOICE_CHANNEL_NAME, {
         type: 'GUILD_VOICE',
-        userLimit: 2,
+        userLimit: 10,
         parent: category,
     })
     const checkInInvite = await checkIn.createInvite()
