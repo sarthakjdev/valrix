@@ -60,14 +60,13 @@ module.exports = {
 
         const playerType = interaction.options.get('player-type').value || 'SUB'
         const playerToAdd = interaction.options.getUser('user')
-        // const valorantPlayer = await client.factory.getPlayerById(playerToAdd.id)
+
         // Check if user is owner
         if (!userPlayer || !userPlayer.team || userPlayer.team.ownerId !== userPlayer.id) {
             const embed = Components.errorEmbed(`You're not owner of any team`)
 
             return interaction.editReply({ embeds: [embed] })
         }
-
         // Check if player is already added to any team
         const player = await client.factory.getPlayerById(playerToAdd.id)
         if (player && player.team) return interaction.editReply(`Player ${playerToAdd} already belongs to ${player.team.name}`)

@@ -279,7 +279,7 @@ class Components {
     static successEmbed(message) {
         const embed = new MessageEmbed()
             .setColor('#125D98')
-            .setDescription(message)
+            .setDescription(`:white_check_mark: **${message}**`)
 
         return embed
     }

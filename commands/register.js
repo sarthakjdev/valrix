@@ -23,7 +23,13 @@ module.exports = {
 
         await client.factory.createPlayer(user.id, valorantPlayer.puuid, valorantPlayer.name, valorantPlayer.tag, 'REGISTERED', 'no-team')
 
-        const successEmbed = Components.successEmbed('You have succcessfully registered your valorant account')
-        await interaction.editReply({ embeds: [successEmbed] })
+        // addding verifies role
+        const guild = await interaction.client.guilds.fetch(process.env.HOME_GUILD_ID)
+        const member = await guild.members.fetch(interaction.user.id)
+        await member.roles.add(process.env.VERIFIED_ROLE)
+
+        const successEmbed = Components.successEmbed('**You have succcessfully registered your valorant account**')
+
+        return interaction.editReply({ embeds: [successEmbed] })
     },
 }
