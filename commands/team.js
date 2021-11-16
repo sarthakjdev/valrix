@@ -8,7 +8,6 @@ module.exports = {
         const teamName = interaction.options.get('name').value
 
         const valorantPlayer = await client.factory.getPlayerById(user.id)
-        console.log('valorantPlayer ', valorantPlayer)
 
         if (!valorantPlayer) {
             const embed = Components.errorEmbed('You have not registered your valorant account yet. Do register it by using /register')

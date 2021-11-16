@@ -25,7 +25,6 @@ module.exports = {
             const owners = await client.factory.getOwners()
             const ownerIds = owners.map((o) => o.id)
             if (!ownerIds.includes(buttonInteraction.user.id)) {
-                // TODO: Throw better error
                 const embed = Components.errorEmbed('You are not a captain of a team to search for queue.')
 
                 return buttonInteraction.reply({ embeds: [embed] })

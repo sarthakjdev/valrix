@@ -21,6 +21,13 @@ module.exports = {
             }
         }
 
+        const player = await client.factory.getPlayerById(user.id)
+        if (player) {
+            const embed = Components.errorEmbed(`You have already registered you account with us`)
+
+            return interaction.editReply({ embeds: [embed] })
+        }
+
         await client.factory.createPlayer(user.id, valorantPlayer.puuid, valorantPlayer.name, valorantPlayer.tag, 'REGISTERED', 'no-team')
 
         // addding verifies role
