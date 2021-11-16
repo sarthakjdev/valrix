@@ -85,11 +85,12 @@ class Factory {
      * Update player's team
      * @param {string} playerId
      * @param {Team} team
+     * @param {string} playerType
      * @return {Promise<Player>}
      */
-    async updatePlayerTeam(playerId, team) {
+    async updatePlayerTeam(playerId, team, playerType) {
         const [dbPlayer] = await knex(PLAYER_TABLE)
-            .update({ team: team.uuid })
+            .update({ team: team.uuid, status: playerType })
             .where({ id: playerId })
             .returning('*')
         dbPlayer.team = team
@@ -105,7 +106,7 @@ class Factory {
     async removePlayer(playerId, team) {
         const [dbPlayer] = await knex(PLAYER_TABLE)
             .where({ id: playerId })
-            .update({ team: null })
+            .update({ team: null, status: 'REGISTERED' })
             .returning('*')
         team.removePlayer(playerId)
         dbPlayer.team = team

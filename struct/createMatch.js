@@ -117,10 +117,10 @@ const createMatch = async (interactions) => {
             return buttonInteraction.reply({ content: `You're not allowed to click button`, ephemeral: true })
         }
         if (turn.id === teamOwner1.id) {
-            turn = teamOwner2
+            turn = teamOwner2.id
             await buttonInteraction.reply({ content: `You have ${actiontaken} ${buttonInteraction.customId}`, ephemeral: true })
         } else {
-            turn = teamOwner1
+            turn = teamOwner1.id
             await buttonInteraction.reply({ content: `You have ${actiontaken} ${buttonInteraction.customId}`, ephemeral: true })
         }
         maps = maps.filter((map) => map !== buttonInteraction.customId)

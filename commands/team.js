@@ -83,7 +83,7 @@ module.exports = {
             return interaction.editReply({ embeds: [embed] })
         }
 
-        if (player) await client.factory.updatePlayerTeam(player.id, userPlayer.team)
+        if (player) await client.factory.updatePlayerTeam(player.id, userPlayer.team, playerType)
         else await client.factory.createPlayer(playerToAdd.id, player.puuid, player.name, player.tag, playerType, userPlayer.team)
 
         const userPlayerTeam = await client.factory.getTeamByName(userPlayer.team)

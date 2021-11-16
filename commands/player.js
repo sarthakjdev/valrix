@@ -7,8 +7,15 @@ module.exports = {
         const { client, user } = interaction
         const infoPlayer = await client.factory.getPlayerById(playerForInfo)
 
+        if (!infoPlayer) {
+            const embed = Components.errorEmbed(`No player has been registered for the user mentioned`)
+
+            return interaction.editReply({ embeds: [embed] })
+        }
+
         const playerInfoComponent = await Components.playerInfo(infoPlayer, user)
-        await interaction.editReply(playerInfoComponent)
+
+        return interaction.editReply(playerInfoComponent)
     },
     async exec(interaction) {
         await interaction.deferReply()
