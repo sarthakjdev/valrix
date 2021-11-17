@@ -50,14 +50,14 @@ class Factory {
      * @param {string} valorantId
      * @param {string} valorantName
      * @param {string} valorantTag
-     * @param {PLAYER_STATUS} status
-     * @param {Team} team
+     * @param {PLAYER_STATUS} [status]
+     * @param {Team} [team]
      * @return {Promise<Player>}
      */
     async createPlayer(id, valorantId, valorantName, valorantTag, status, team) {
         const [dbPlayer] = await knex(PLAYER_TABLE)
             .insert({
-                id, valorantId, valorantName, valorantTag, status, team: team.uuid,
+                id, valorantId, valorantName, valorantTag, status, team: team?.uuid,
             }).returning('*')
 
         dbPlayer.team = team
@@ -89,6 +89,7 @@ class Factory {
      * @return {Promise<Player>}
      */
     async updatePlayerTeam(playerId, team, playerType) {
+        console.log(team)
         const [dbPlayer] = await knex(PLAYER_TABLE)
             .update({ team: team.uuid, status: playerType })
             .where({ id: playerId })
@@ -114,7 +115,10 @@ class Factory {
         return new Player(dbPlayer)
     }
 
-    // get all registered teams
+    /**
+     * Get all registerd teams
+     * @return {Promise<any[]>}
+     */
     async getRegisteredTeams() {
         const dbTeams = await knex(TEAM_TABLE).select('*')
 

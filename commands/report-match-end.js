@@ -10,19 +10,13 @@ module.exports = {
 
         return dbTeam.rating
     },
-    // function to be used for calculating rating after a match ends :
-    // async calcRating(team1Elo, team2Elo, team1Score, team2Score) {
-    //     /*
-    //         A function for outputting the change in a team1's ELO score.
-    //         team1_elo: The ELO of team 1.
-    //         team2_elo: The ELO of team 2.
-    //         team1_score: The score of team 1.
-    //         team2_score: The score of team 2.
-    //          */
-    //     return 30 * (team1Score > team2Score)
-    // - ((1 / 10) * (((team - team2Elo) / 400) + 1)
-    // * (Math.log(2 * Math.abs(team1Score - team2Score) + 1) * 2.2) / (team1Score > team2Score ? team - team2Elo : ((team2Elo - team) * 0.001 + 2.2)))
-    // },
+
+    async calcRating(team1Elo, team2Elo, team1Score, team2Score) {
+        return 30 * (team1Score > team2Score)
+    - ((1 / 10) * (((team1Elo - team2Elo) / 400) + 1)
+    * (Math.log(2 * Math.abs(team1Score - team2Score) + 1) * 2.2) / (team1Score > team2Score ? team1Elo - team2Elo : ((team2Elo - team1Elo) * 0.001 + 2.2)))
+    },
+
     async exec(interaction) {
         const { client, user } = interaction
         const userPlayer = await client.factory.getPlayerById(user.id)
@@ -42,8 +36,8 @@ module.exports = {
             return interaction.editReply({ embeds: [embed] })
         }
 
-        const userTeam = match.players.red.find((p) => p.puuid === userPlayer.valorantId) ? 'red' : 'blue'
-
+        // const userTeam = match.players.red.find((p) => p.puuid === userPlayer.valorantId) ? 'red' : 'blue'
+        //
         // const requiredMatch = matches[0]
         // // finding userplayer team colour
         // const userPlayerTeamColour = requiredMatch.players.all_players.find((p) => p.tag === userPlayer.tag).team.toLowerCase()

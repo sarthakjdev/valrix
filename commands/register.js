@@ -9,16 +9,12 @@ module.exports = {
         // Extract valorant player data
         const valorantName = interaction.options.get('valorant-name')?.value
         const valorantTag = interaction.options.get('valorant-tag')?.value
-        let valorantPlayer
 
-        // If valorant player inputs are given, make sure user exist
-        if (valorantName && valorantTag) {
-            valorantPlayer = await valorantAPI.getPlayerByIGN(valorantName, valorantTag)
-            if (!valorantPlayer) {
-                const embed = Components.errorEmbed(`Valorant Player not found for ${valorantName}#${valorantTag}. Check your valorant credentials again.`)
+        const valorantPlayer = await valorantAPI.getPlayerByIGN(valorantName, valorantTag)
+        if (!valorantPlayer) {
+            const embed = Components.errorEmbed(`Valorant Player not found for ${valorantName}#${valorantTag}. Check your valorant credentials again.`)
 
-                return interaction.editReply({ embeds: [embed] })
-            }
+            return interaction.editReply({ embeds: [embed] })
         }
 
         const player = await client.factory.getPlayerById(user.id)
@@ -28,7 +24,7 @@ module.exports = {
             return interaction.editReply({ embeds: [embed] })
         }
 
-        await client.factory.createPlayer(user.id, valorantPlayer.puuid, valorantPlayer.name, valorantPlayer.tag, 'REGISTERED', 'null')
+        await client.factory.createPlayer(user.id, valorantPlayer.puuid, valorantPlayer.name, valorantPlayer.tag)
 
         // addding verifies role
         const guild = await interaction.client.guilds.fetch(process.env.HOME_GUILD_ID)

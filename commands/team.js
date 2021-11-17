@@ -68,6 +68,7 @@ module.exports = {
         }
         // Check if player is already added to any team
         const player = await client.factory.getPlayerById(playerToAdd.id)
+        if (!player) return interaction.editReply('This user is not registered')
         if (player && player.team) return interaction.editReply(`Player ${playerToAdd} already belongs to ${player.team.name}`)
 
         // Check max subs and player numbers
@@ -83,10 +84,9 @@ module.exports = {
             return interaction.editReply({ embeds: [embed] })
         }
 
-        if (player) await client.factory.updatePlayerTeam(player.id, userPlayer.team, playerType)
-        else await client.factory.createPlayer(playerToAdd.id, player.puuid, player.name, player.tag, playerType, userPlayer.team)
+        await client.factory.updatePlayerTeam(player.id, userPlayer.team, playerType)
 
-        const userPlayerTeam = await client.factory.getTeamByName(userPlayer.team)
+        const userPlayerTeam = await client.factory.getTeamByName(userPlayer.team.name)
         const playerAddedComponents = Components.teamPlayerComponent(playerToAdd, userPlayerTeam, 'added', userPlayer)
 
         return interaction.editReply(playerAddedComponents)
