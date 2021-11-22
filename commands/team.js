@@ -133,8 +133,9 @@ module.exports = {
 
         return interaction.editReply(playerLeftComponent)
     },
-    async info(interaction, userPlayer) {
-        const { client } = interaction
+    async info(interaction) {
+        const { client, user } = interaction
+        const userPlayer = await client.factory.getPlayerById(user.id)
 
         const teamName = interaction.options.get('team-name')?.value
         if (teamName) {
@@ -143,12 +144,13 @@ module.exports = {
 
             return interaction.editReply({ embeds: [teamInfoComponent] })
         }
-        const playerToSearch = interaction.options.getUser('user')
-        const dbPlayerToSearch = await client.factory.getPlayerById(playerToSearch)
+        const playerToSearch = interaction.options.get('user')?.value
+        let dbPlayerToSearch
+        if (playerToSearch) dbPlayerToSearch = await client.factory.getPlayerById(playerToSearch)
 
         const player = dbPlayerToSearch || userPlayer
         if (!player || !player.team) {
-            const embed = Components.errorEmbed(`<@${player.id}> doesn't belong to any team.`)
+            const embed = Components.errorEmbed(`User doesn't belong to any team.`)
 
             return interaction.editReply({ embeds: [embed] })
         }

@@ -89,7 +89,6 @@ class Factory {
      * @return {Promise<Player>}
      */
     async updatePlayerTeam(playerId, team, playerType) {
-        console.log(team)
         const [dbPlayer] = await knex(PLAYER_TABLE)
             .update({ team: team.uuid, status: playerType })
             .where({ id: playerId })
