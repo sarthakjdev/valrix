@@ -157,4 +157,8 @@ module.exports = [
             },
         ],
     },
+    {
+        name: 'leaderboard',
+        description: 'shows the leaderboard',
+    },
 ]

@@ -208,6 +208,27 @@ class Factory {
 
         return players.map((p) => ({ ...p, team })).map((p) => new Player(p))
     }
+
+    /**
+     * Get all rated teams in descending order of their rating:
+     * @return {Promise<any[]>}
+     */
+    async getLeaderboard() {
+        const dbTeams = await knex(TEAM_TABLE)
+            .select('*')
+            .orderBy('rating', 'desc')
+
+        let teams = dbTeams.map((dbTeam) => new Team(dbTeam))
+
+        teams = await Promise.all(teams.map(async (team) => {
+            const players = await this.getTeamPlayers(team)
+            team.addPlayers(players)
+
+            return team
+        }))
+
+        return teams
+    }
 }
 
 module.exports = Factory

@@ -129,7 +129,6 @@ class Components {
 
     // Components generated for map selection embeds
     static genMapBoard(availableMaps, playerTurn, i, cap1, cap2) {
-        // TODO : If availableMps.length = 2 -> change embed and button color and text to 'pick' from 'ban'
         let buttonColor = 'DANGER'
         let image = SELECT_MAP
 
@@ -247,8 +246,8 @@ class Components {
             .setAuthor('GLS Bot', `${THUMBNAIL}`)
             .setDescription(`**Here your player information <@${user.id}>**`)
             .addField('Player:', `<@${player.id}>`)
-            .addField('Valorant Game Name: :', `${player.tag}`)
             .addField('Valorant Game Name: :', `${player.name}`)
+            .addField('Valorant Tagline: :', `${player.tag}`)
             .addField('Team Name: :', `${player.team.name}`)
             .setThumbnail(`${THUMBNAIL}`)
             .setColor('#125D98')
@@ -306,6 +305,21 @@ class Components {
 
         return {
             embeds: [teamStagedComponents],
+        }
+    }
+
+    static leaderboard(teams) {
+        const leaderboardComponent = new MessageEmbed()
+            .setAuthor('GLS Bot', `${THUMBNAIL}`)
+            .setTitle(`**Leaderboard **`)
+            .setDescription(`**NOTE : ELOs showed here are only approximate value, however exact values are being used to calculate the rankings **`)
+            .setThumbnail(`${THUMBNAIL}`)
+            .setColor('#125D98')
+            .addField('Rankings', `${teams.map((team) => team.name).join(` - \n`)}`, true)
+            .addField('ELOs (Approx)', `${teams.map((team) => Math.floor(team.rating)).join(`\n`)}`, true)
+
+        return {
+            embeds: [leaderboardComponent],
         }
     }
 }
