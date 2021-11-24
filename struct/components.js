@@ -315,8 +315,9 @@ class Components {
             .setDescription(`**NOTE : ELOs showed here are only approximate value, however exact values are being used to calculate the rankings **`)
             .setThumbnail(`${THUMBNAIL}`)
             .setColor('#125D98')
-            .addField('Rankings', `${teams.map((team) => team.name).join(` - \n`)}`, true)
-            .addField('ELOs (Approx)', `${teams.map((team) => Math.floor(team.rating)).join(`\n`)}`, true)
+            .addField('Rank', `${Array.from({ length: teams.length }, (_, x) => `\`${x + 1}\``).join(`\n`)}`, true)
+            .addField('Rankings', `${teams.map((team) => `\`${team.name}\``).join(`\n`)}`, true)
+            .addField('ELOs (Approx)', `${teams.map((team) => `\`${Math.floor(team.rating)}\``).join(`\n`)}`, true)
 
         return {
             embeds: [leaderboardComponent],
