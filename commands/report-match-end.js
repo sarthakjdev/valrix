@@ -1,27 +1,21 @@
+/* eslint-disable no-restricted-syntax,no-await-in-loop */
 const valorantAPI = require('../models/valorantAPI')
 const Components = require('../struct/components')
 
 module.exports = {
     name: 'report-match-end',
-    async getTeamRating(interaction, player) {
-        const { client } = interaction
-        const dbPlayer = await client.factory.getPlayerById(player.id)
-        const dbTeam = await client.factory.getTeamByName(dbPlayer.name)
-
-        return dbTeam.rating
-    },
-
-    async calcRating(team1Elo, team2Elo, team1Score, team2Score) {
+    calcRating(team1Elo, team2Elo, team1Score, team2Score) {
         return 30 * (team1Score > team2Score)
     - ((1 / 10) * (((team1Elo - team2Elo) / 400) + 1)
     // eslint-disable-next-line no-mixed-operators
     * (Math.log(2 * Math.abs(team1Score - team2Score) + 1) * 2.2) / (team1Score > team2Score ? team1Elo - team2Elo : ((team2Elo - team1Elo) * 0.001 + 2.2)))
     },
-    async deletechannels(interaction) {
+
+    async deleteChannels(interaction) {
         // deleting respective game channels
         const category = await interaction.channel.parent
         const channels = await category.children
-        await channels.map((ch) => ch.delete())
+        await Promise.all(channels.map((c) => c.delete()))
         await category.delete()
     },
 
@@ -44,34 +38,28 @@ module.exports = {
             return interaction.editReply({ embeds: [embed] })
         }
 
-        const userTeam = match.players.red.find((p) => p.puuid === userPlayer.valorantId) ? 'red' : 'blue'
+        const team = match.players.all_players.find((p) => p.puuid === userPlayer.valorantId).team.toLowerCase()
 
-        // finding userplayer team colour
-        const userPlayerTeamColour = match.players.all_players.find((p) => p.tag === userPlayer.tag).team.toLowerCase()
-        const opponentTeamColour = userPlayerTeamColour === 'red' ? 'blue' : 'red'
+        const redTeamScore = match.players.red.reduce((t, p) => t + p.stats.score, 0)
+        const blueTeamScore = match.players.blue.reduce((t, p) => t + p.stats.score, 0)
 
-        const team1DbRating = userPlayer.team.rating
-        const team2DbRating = match.players.blue[0]
+        const team2 = team === 'red' ? match.players.blue : match.players.red
 
-        // finding both teams players scores arrays
-        const redTeamPlayerScores = match.players.red.map((p) => p.stats.score)
-        const blueTeamPlayerScores = match.players.blue.map((p) => p.stats.score)
+        let team2Cap
+        for (const player of team2) {
+            const dbPlayer = await interaction.client.factory.getPlayerByValorantId(player.puuid)
+            if (dbPlayer.status === 'owner') {
+                team2Cap = dbPlayer
+                break
+            }
+        }
+        if (!team2Cap) return interaction.edit('Op team not found')
 
-        // finding average of both the team to be used as team scores :
-        const redTeamAvg = redTeamPlayerScores.reduce((sum, player) => sum + player.elo, 0) / redTeamPlayerScores.length
-        const blueTeamAvg = blueTeamPlayerScores.reduce((sum, player) => sum + player.elo, 0) / blueTeamPlayerScores.length
+        const team1Score = team === 'red' ? redTeamScore : blueTeamScore
+        const team2Score = team === 'red' ? blueTeamScore : redTeamScore
+        const team1Elo = userPlayer.team.rating
+        const team2Elo = team2Cap.team.rating
 
-        const team1Score = userPlayerTeamColour === 'red' ? redTeamAvg : blueTeamAvg
-        const team2Score = opponentTeamColour === 'blue' ? blueTeamAvg : redTeamAvg
-
-        const ratingCalculated = await this.calcRating(team1Score, team2Score, team1DbRating, team2DbRating)
-        const updatedTeamRating = team1DbRating + ratingCalculated
-        await client.factory.updateTeamRating(userPlayer.team)
-
-        const reportMatchComponent = Components.reportMatch(ratingCalculated, updatedTeamRating)
-
-        await interaction.editReply(reportMatchComponent)
-
-        return this.deletechannels(interaction)
+        return this.deleteChannels(interaction)
     },
 }

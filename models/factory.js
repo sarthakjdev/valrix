@@ -183,6 +183,20 @@ class Factory {
     }
 
     /**
+     * Get player by valorant Id
+     * @param id
+     * @return {Promise<Player|undefined>}
+     */
+    async getPlayerByValorantId(id) {
+        const [dbPlayer] = await knex(PLAYER_TABLE).where({ valorantId: id })
+        if (!dbPlayer) return undefined
+        const player = new Player(dbPlayer)
+        if (dbPlayer.team) player.team = await this.getTeamByUuid(dbPlayer.team)
+
+        return player
+    }
+
+    /**
      * Update team's rating
      * @param {Team} teamToUpdate
      * @param {number} rating
