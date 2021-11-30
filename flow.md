@@ -123,31 +123,5 @@ console.log(eloDiff(true, 20,  30, 2, 3));
 # BUGS 
 
 
- - line number 86 - it iis updating the team but operation is not successfulyy implemented, it shows the follwoing error : 
-
- ``
- Error: select * from "public"."teams" where "name" = $1 - Converting circular structure to JSON
-    --> starting at object with constructor 'Team'
-    |     property '_players' -> object with constructor 'Array'
-    |     index 0 -> object with constructor 'Player'
-    --- property 'team' closes the circle
-description : command error :: team | Bot testing | bot-commands | Sarthak Jain#2443
-Stack: TypeError: select * from "public"."teams" where "name" = $1 - Converting circular structure to JSON
-    --> starting at object with constructor 'Team'
-    |     property '_players' -> object with constructor 'Array'
-    |     index 0 -> object with constructor 'Player'
-    --- property 'team' closes the circle
-    at JSON.stringify (<anonymous>)
-    at prepareObject (/home/sarthak/projects/freelance/gls-bot/node_modules/pg/lib/utils.js:81:15)
-    at prepareValue (/home/sarthak/projects/freelance/gls-bot/node_modules/pg/lib/utils.js:66:12)
-    at prepareValueWrapper (/home/sarthak/projects/freelance/gls-bot/node_modules/pg/lib/utils.js:182:12)
-    at writeValues (/home/sarthak/projects/freelance/gls-bot/node_modules/pg-protocol/dist/serializer.js:67:41)
-    at Object.bind (/home/sarthak/projects/freelance/gls-bot/node_modules/pg-protocol/dist/serializer.js:98:5)
-    at Connection.bind (/home/sarthak/projects/freelance/gls-bot/node_modules/pg/lib/connection.js:160:26)
-    at Query.prepare (/home/sarthak/projects/freelance/gls-bot/node_modules/pg/lib/query.js:204:18)
-    at Query.submit (/home/sarthak/projects/freelance/gls-bot/node_modules/pg/lib/query.js:155:12)
-    at Client._pulseQueryQueue (/home/sarthak/projects/freelance/gls-bot/node_modules/pg/lib/client.js:481:45)
----
-=== End Error ===
-
- ``
+ - line number 86 - it iis updating the team but operation is not successfulyy implemented, it shows the follwoing error :
+ 

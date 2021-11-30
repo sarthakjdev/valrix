@@ -20,8 +20,7 @@ module.exports = {
 
         for (const team of teamsToStage) {
             const playerRatings = await Promise.all(team.players.map((p) => valorantAPI.getPlayerRating(p.name, p.tag)))
-            const avg = playerRatings.reduce((sum, player) => sum + player.elo, 0) / playerRatings.length
-            const rating = 1700 - (400 * (1 - (avg / 105)))
+            const rating = playerRatings.reduce((sum, player) => sum + player.elo, 0) / playerRatings.length
 
             await client.factory.updateTeamRating(team, rating)
         }

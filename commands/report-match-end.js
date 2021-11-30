@@ -5,10 +5,10 @@ const Components = require('../struct/components')
 module.exports = {
     name: 'report-match-end',
     calcRating(team1Elo, team2Elo, team1Score, team2Score) {
-        return 30 * (team1Score > team2Score)
-    - ((1 / 10) * (((team1Elo - team2Elo) / 400) + 1)
-    // eslint-disable-next-line no-mixed-operators
-    * (Math.log(2 * Math.abs(team1Score - team2Score) + 1) * 2.2) / (team1Score > team2Score ? team1Elo - team2Elo : ((team2Elo - team1Elo) * 0.001 + 2.2)))
+        return 50 * ((team2Score > team1Score)
+        - 1 / (10 ** ((team1Elo - team2Elo) / 2000) + 1))
+        * ((Math.log(2 * Math.abs(team1Score - team2Score) + 1) * 2.2)
+        / ((team1Score > team2Score ? team1Elo - team2Elo : team2Elo - team1Elo) * 0.001 + 2.2))
     },
 
     async deleteChannels(interaction) {
@@ -38,7 +38,16 @@ module.exports = {
             return interaction.editReply({ embeds: [embed] })
         }
 
-        const team = match.players.all_players.find((p) => p.puuid === userPlayer.valorantId).team.toLowerCase()
+        // check if the user's team is winning team or not :
+        const userPlayerData = await match.players.all_players.find((p) => p.puuid === userPlayer.valorantId)
+        const team = userPlayerData.team.toLowerCase()
+        const winningTeam = await match.teams.red.has_won === true ? 'red' : 'blue'
+
+        if (winningTeam !== team) {
+            const embed = Components.errorEmbed('You are allowed to use this command')
+
+            return interaction.editReply({ embeds: [embed] })
+        }
 
         const redTeamScore = match.players.red.reduce((t, p) => t + p.stats.score, 0)
         const blueTeamScore = match.players.blue.reduce((t, p) => t + p.stats.score, 0)
@@ -55,10 +64,17 @@ module.exports = {
         }
         if (!team2Cap) return interaction.edit('Op team not found')
 
-        const team1Score = team === 'red' ? redTeamScore : blueTeamScore
-        const team2Score = team === 'red' ? blueTeamScore : redTeamScore
+        const team1Score = winningTeam === 'red' ? redTeamScore : blueTeamScore
+        const team2Score = winningTeam === 'red' ? blueTeamScore : redTeamScore
+        // const team1Score = team === 'red' ? redTeamScore : blueTeamScore
+        // const team2Score = team === 'red' ? blueTeamScore : redTeamScore
         const team1Elo = userPlayer.team.rating
         const team2Elo = team2Cap.team.rating
+
+        const diff = await this.calcRating(team1Score, team2Score, team1Elo, team2Elo)
+
+        await client.factory.updateTeamRating(userPlayer.team, team1Elo + diff)
+        await client.factory.updateTeamRating(team2Cap.team, team1Elo - diff)
 
         return this.deleteChannels(interaction)
     },
