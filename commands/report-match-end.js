@@ -44,37 +44,39 @@ module.exports = {
         const winningTeam = await match.teams.red.has_won === true ? 'red' : 'blue'
 
         if (winningTeam !== team) {
-            const embed = Components.errorEmbed('You are allowed to use this command')
+            const embed = Components.errorEmbed('You are not allowed to use this command')
 
             return interaction.editReply({ embeds: [embed] })
         }
 
-        const redTeamScore = match.players.red.reduce((t, p) => t + p.stats.score, 0)
-        const blueTeamScore = match.players.blue.reduce((t, p) => t + p.stats.score, 0)
+        const redTeamScore = match.teams.red.rounds_won
+        const blueTeamScore = match.teams.blue.rounds_won
 
         const team2 = team === 'red' ? match.players.blue : match.players.red
 
         let team2Cap
         for (const player of team2) {
             const dbPlayer = await interaction.client.factory.getPlayerByValorantId(player.puuid)
-            if (dbPlayer.status === 'owner') {
+            if (dbPlayer.status === 'OWNER') {
                 team2Cap = dbPlayer
                 break
             }
         }
-        if (!team2Cap) return interaction.edit('Op team not found')
+        if (!team2Cap) {
+            const embed = await Components.errorEmbed('Your match was not with the team that has ')
+
+            return interaction.editReply({ embeds: [embed] })
+        }
 
         const team1Score = winningTeam === 'red' ? redTeamScore : blueTeamScore
         const team2Score = winningTeam === 'red' ? blueTeamScore : redTeamScore
-        // const team1Score = team === 'red' ? redTeamScore : blueTeamScore
-        // const team2Score = team === 'red' ? blueTeamScore : redTeamScore
         const team1Elo = userPlayer.team.rating
         const team2Elo = team2Cap.team.rating
 
-        const diff = await this.calcRating(team1Score, team2Score, team1Elo, team2Elo)
+        const diff = await this.calcRating(team1Elo, team2Elo, team1Score, team2Score)
 
-        await client.factory.updateTeamRating(userPlayer.team, team1Elo + diff)
-        await client.factory.updateTeamRating(team2Cap.team, team1Elo - diff)
+        await client.factory.updateTeamRating(userPlayer.team, team1Elo - diff)
+        await client.factory.updateTeamRating(team2Cap.team, team1Elo + diff)
 
         return this.deleteChannels(interaction)
     },
