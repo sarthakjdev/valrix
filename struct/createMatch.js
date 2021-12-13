@@ -97,7 +97,7 @@ const createMatch = async (interactions) => {
 
     await checkIn.delete()
 
-    let turn = members.cache.get(teamOwner1.id)
+    let turn = teamOwner1
 
     let maps = ['Bind', 'Haven', 'Split', 'Ascent', 'Icebox', 'Breeze', 'Fracture']
 

@@ -249,6 +249,10 @@ class Components {
             .addField('Valorant Game Name: :', `${player.name}`)
             .addField('Valorant Tagline: :', `${player.tag}`)
             .addField('Team Name: :', `${player.team.name}`)
+            .addField('Total kills :', `${player.kills}`)
+            .addField('Total deaths :', `${player.deaths}`)
+            .addField('Total assists :', `${player.assists}`)
+            .addField('Average Combat Score :', `${player.average_combat_score}`)
             .setThumbnail(`${THUMBNAIL}`)
             .setColor('#125D98')
 
@@ -321,6 +325,27 @@ class Components {
 
         return {
             embeds: [leaderboardComponent],
+        }
+    }
+
+    static async matchHistory(matches, teamName) {
+        const matchEmbed = new MessageEmbed()
+            .setAuthor('GLS Bot', `${THUMBNAIL}`)
+            .setThumbnail(`${THUMBNAIL}`)
+            .setColor('#125D98')
+            .setDescription(`Match history of \`${teamName}\``)
+        await matches.map((m) => {
+            matchEmbed
+                .setField('Winning Team', `\`${m.winningTeam}\``, true)
+                .addField('Team Team', `\`${m.losingTeam}\``, true)
+                .addField('Map Played', `\`${m.map}\``, true)
+                .addField('Elo Gained/Lost', `\`${m.eloDiff}\``, true)
+                .addField('Rounds Played', `\`${m.totalRounds}\``, true)
+                .addField('Score', `\`${m.score}\``, true)
+        })
+
+        return {
+            embeds: [matchEmbed],
         }
     }
 }

@@ -6,6 +6,10 @@ class Player {
         this.tag = data.valorantTag
         this.name = data.valorantName
         this.status = data.status
+        this.kills = data.kills
+        this.assists = data.assists
+        this.deaths = data.deaths
+        this.averageCombatScore = data.averageCombatScore
         this.team = data.team
         this.valorantId = data.valorantId
     }

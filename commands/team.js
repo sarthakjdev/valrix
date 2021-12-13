@@ -159,6 +159,31 @@ module.exports = {
 
         return interaction.editReply({ embeds: [teamInfoComponent] })
     },
+    async history(interaction, userPlayer) {
+        const { client } = interaction
+
+        const teamName = interaction.options.get('team')?.value
+        if (teamName) {
+            const team = client.factory.getTeamByName(teamName)
+            const matches = await client.factory.getMatchHistory(team)
+            const teamHistoryComponent = await Components.matchHistory(matches, teamName)
+
+            return interaction.editReply(teamHistoryComponent)
+        }
+        const userInput = await interaction.options.get('user')?.value
+        let dbPlayerToSearch
+        if (userInput) dbPlayerToSearch = await client.factory.getPlayerById(userInput)
+        const player = dbPlayerToSearch || userPlayer
+        if (!player || !player.team) {
+            const embed = Components.errorEmbed(`User doesn't belong to any team.`)
+
+            return interaction.editReply({ embeds: [embed] })
+        }
+        const matches = await client.factory.getMatchHistory(player.team)
+        const teamHistoryComponent = Components.matchHistory(matches, player.team.name)
+
+        return interaction.editReply(teamHistoryComponent)
+    },
     async exec(interaction) {
         const { client, user } = interaction
         await interaction.deferReply()
@@ -193,6 +218,8 @@ module.exports = {
                 return this.leave(interaction, userPlayer)
             case 'info':
                 return this.info(interaction, userPlayer)
+            case 'history':
+                return this.history(interaction, userPlayer)
             default:
                 return interaction.editReply('Not implemented')
         }

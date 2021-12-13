@@ -78,6 +78,24 @@ module.exports = {
         await client.factory.updateTeamRating(userPlayer.team, team1Elo - diff)
         await client.factory.updateTeamRating(team2Cap.team, team1Elo + diff)
 
+        // updating adding match to the match histoy table in db:-
+        const { matchid } = match.metadata
+        const { map } = match.metadata
+        const totalRounds = match.rounds.length
+        const teams = [`${userPlayer.team.uuid}`, `${team2Cap.team.uuid}`]
+        const score = `${match.teams.red.rounds_won}-${match.teams.red.rounds_lost}`
+        await client.factory.createMatch(matchid, teams, map, userPlayer.team.uuid, team2Cap.team.uuid, totalRounds, -score, -diff) // calling db updation function to upfdate match history
+
+        // Updating players stats:
+        await match.players.all_players.map(async (p) => {
+            const player = await client.factory.getPlayerByValorantId(p.uuid)
+            const kills = player.kills + p.stats.kills
+            const deaths = player.deaths + p.stats.deaths
+            const assists = player.assists + p.stats.assists
+            const averageScore = player.averageCombatScore
+            await client.factory.updatePlayerStats(player.id, kills, deaths, assists, averageScore)
+        })
+
         return this.deleteChannels(interaction)
     },
 }

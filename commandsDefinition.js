@@ -103,6 +103,23 @@ module.exports = [
                     },
                 ],
             },
+            {
+                name: 'history',
+                description: 'match history of a team upto 5 matches',
+                type: 1,
+                options: [
+                    {
+                        name: 'user',
+                        description: 'team of the user mentioned',
+                        type: 'USER',
+                    },
+                    {
+                        name: 'team',
+                        description: 'name of the team',
+                        type: 'STRING',
+                    },
+                ],
+            },
         ],
     },
     {

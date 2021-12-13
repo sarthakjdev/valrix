@@ -8,8 +8,8 @@ module.exports = {
         await interaction.deferReply()
         // Extract valorant player data
         const valorantName = interaction.options.get('valorant-name')?.value
-        const valorantTag = interaction.options.get('valorant-tag')?.value
-
+        const valorantTagInput = interaction.options.get('valorant-tag')?.value
+        const valorantTag = valorantTagInput.trim().split('#')[1]
         const valorantPlayer = await valorantAPI.getPlayerByIGN(valorantName, valorantTag)
         if (!valorantPlayer) {
             const embed = Components.errorEmbed(`Valorant Player not found for ${valorantName}#${valorantTag}. Check your valorant credentials again.`)

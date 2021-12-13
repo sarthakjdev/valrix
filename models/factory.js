@@ -1,9 +1,12 @@
 const knex = require('../util/knex')
 const Team = require('./team')
 const Player = require('./player')
+const Match = require('./match')
 
 const TEAM_TABLE = 'public.teams'
 const PLAYER_TABLE = 'public.players'
+const MATCH_TABLE = 'public.match_history'
+
 const PLAYER_STATUS = {
     owner: 'OWNER',
     player: 'PLAYER',
@@ -94,6 +97,26 @@ class Factory {
             .where({ id: playerId })
             .returning('*')
         dbPlayer.team = team
+
+        return new Player(dbPlayer)
+    }
+
+    /**
+     * Update player's stats
+     * @param {string} playerId
+     * @param {number} kills
+     * @param {number} deaths
+     * @param {number} assists
+     * @param {number} averageCombatScore
+     * @returns {Promise<Player>}
+     */
+    async updatePlayerStats(playerId, kills, deaths, assists, averageCombatScore) {
+        const [dbPlayer] = await knex(PLAYER_TABLE)
+            .update({
+                kills, deaths, assists, average_combat_score: averageCombatScore,
+            })
+            .where({ id: playerId })
+            .returning('*')
 
         return new Player(dbPlayer)
     }
@@ -242,6 +265,57 @@ class Factory {
         }))
 
         return teams
+    }
+
+    /**
+     * Create match
+     * @param {string} uuid
+     * @param {string} map
+     * @param {string} winningTeam
+     * @param {string} losigTeam
+     * @param {string} totalRounds
+     * @param {string} eloDiff
+     * @param {string} score
+     * @returns {Promise<Match>}
+     */
+    async createMatch(uuid, teams, map, winningTeam, losingTeam, totalRounds, score, eloDiff) {
+        const [dbMatch] = await knex(MATCH_TABLE)
+            .insert({
+                uuid, teams, map, winningTeam, losingTeam, totalRounds, score, eloDiff,
+            })
+            .returning('*')
+        const match = new Match(dbMatch)
+
+        return match
+    }
+
+    /**
+     *  Get match by uuid
+     * @param {string} uuid
+     * @returns {Promise<Match>}
+     */
+    async getMatch(uuid) {
+        const [dbMatch] = await knex(MATCH_TABLE)
+            .select({ uuid })
+
+        const match = new Match(dbMatch)
+
+        return match
+    }
+
+    /**
+     * Get match history
+     * @param {string} teamUUID
+     * @returns {Promise<any[]>}
+     */
+    async getMatchHistory(teamUUID) {
+        const matchHistory = await knex(MATCH_TABLE)
+            .select('*')
+            .whereIn('teams', [teamUUID])
+
+        const matches = matchHistory.map((m) => new Match(m))
+
+        return matches
     }
 }
 
