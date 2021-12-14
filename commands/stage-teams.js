@@ -1,3 +1,8 @@
+
+/*
+    /stage-teams command of gls bot to stage the teams by calculating their iniitial ratings
+*/
+
 /* eslint-disable no-restricted-syntax,no-await-in-loop */
 const valorantAPI = require('../models/valorantAPI')
 const Components = require('../struct/components')

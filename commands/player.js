@@ -1,4 +1,8 @@
 
+/*
+    /player command of gls bot to get a player profile
+*/
+
 const Components = require('../struct/components')
 
 module.exports = {

@@ -1,4 +1,8 @@
 
+/*
+    /leaderboard command of gls bot to get the leaderboard
+*/
+
 const Components = require('../struct/components')
 
 module.exports = {

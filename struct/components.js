@@ -279,6 +279,7 @@ class Components {
         return Util.embed().setDescription(`:x: **${message}**`)
     }
 
+    // embed for showing correct excetution of a process
     static successEmbed(message) {
         const embed = new MessageEmbed()
             .setColor('#125D98')
@@ -287,6 +288,7 @@ class Components {
         return embed
     }
 
+    // component to be send after match report comand has been used:
     static reportMatch(ratingCalculated, updatedRating) {
         const reportMatchComponent = new MessageEmbed()
             .setAuthor('GLS Bot', `${THUMBNAIL}`)
@@ -299,11 +301,13 @@ class Components {
         }
     }
 
+    // Embed to be send after teams has been stages
     static teamsStaged(stagedTeams) {
         const teamStagedComponents = new MessageEmbed()
             .setAuthor('GLS Bot', `${THUMBNAIL}`)
             .setDescription(`**All eligible teams has been staged for ranking**`)
-            .addField('List of teeam Staged:', `${stagedTeams.map((t) => t.name).join('\n')}`)
+            .addField('Rank', `${Array.from({ length: stagedTeams.length }, (y, x) => `\`${x + 1}\``).join(`\n`)}`, true)
+            .addField('List of teeam Staged:', `\`${stagedTeams.map((t) => t.name).join('\n')}\``, true)
             .setThumbnail(`${THUMBNAIL}`)
             .setColor('#125D98')
 
@@ -312,6 +316,7 @@ class Components {
         }
     }
 
+    // leaderboard
     static leaderboard(teams) {
         const leaderboardComponent = new MessageEmbed()
             .setAuthor('GLS Bot', `${THUMBNAIL}`)
@@ -328,6 +333,7 @@ class Components {
         }
     }
 
+    // component to share the match history of a team.
     static async matchHistory(matches, teamName) {
         const matchEmbed = new MessageEmbed()
             .setAuthor('GLS Bot', `${THUMBNAIL}`)

@@ -1,3 +1,8 @@
+
+/*
+    /team command of gls bot having multiple subcommands to operate the team's opeations
+*/
+
 const Components = require('../struct/components')
 const valorantAPI = require('../models/valorantAPI')
 

@@ -1,3 +1,8 @@
+
+/*
+    /report-match-end command of gls bot to report the score after a match ends: to be used staright after the match ends otherwise it will not work
+*/
+
 /* eslint-disable no-restricted-syntax,no-await-in-loop */
 const valorantAPI = require('../models/valorantAPI')
 const Components = require('../struct/components')

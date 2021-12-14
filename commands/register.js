@@ -1,3 +1,8 @@
+
+/*
+    /register command of gls bot for the user to link their valorant account with our system
+*/
+
 const Components = require('../struct/components')
 const valorantAPI = require('../models/valorantAPI')
 

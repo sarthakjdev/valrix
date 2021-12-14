@@ -268,7 +268,7 @@ class Factory {
     }
 
     /**
-     * Create match
+     * Create match in the db after
      * @param {string} uuid
      * @param {string} map
      * @param {string} winningTeam

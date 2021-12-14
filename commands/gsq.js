@@ -1,4 +1,8 @@
 
+/*
+    /gsq command of gls bot to initialise the queuing system
+*/
+
 const Components = require('../struct/components')
 
 const startMsgComponents = Components.startPlaying()
