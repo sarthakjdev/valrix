@@ -169,8 +169,8 @@ module.exports = {
 
         const teamName = interaction.options.get('team')?.value
         if (teamName) {
-            const team = client.factory.getTeamByName(teamName)
-            const matches = await client.factory.getMatchHistory(team)
+            const team = await client.factory.getTeamByName(teamName)
+            const matches = await client.factory.getMatchHistory(team.uuid)
             const teamHistoryComponent = await Components.matchHistory(matches, teamName)
 
             return interaction.editReply(teamHistoryComponent)

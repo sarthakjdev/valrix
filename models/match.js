@@ -1,7 +1,7 @@
 class Match {
     constructor(data) {
         this.uuid = data.uuid
-        this.winnningTeam = data.winnningTeam
+        this.winnningTeam = data.winningTeam
         this.losingTeam = data.losingTeam
         this.map = data.map
         this.eloDiff = data.eloDiff

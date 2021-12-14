@@ -340,19 +340,27 @@ class Components {
             .setThumbnail(`${THUMBNAIL}`)
             .setColor('#125D98')
             .setDescription(`Match history of \`${teamName}\``)
-        await matches.map((m) => {
-            matchEmbed
-                .setField('Winning Team', `\`${m.winningTeam}\``, true)
-                .addField('Team Team', `\`${m.losingTeam}\``, true)
-                .addField('Map Played', `\`${m.map}\``, true)
-                .addField('Elo Gained/Lost', `\`${m.eloDiff}\``, true)
-                .addField('Rounds Played', `\`${m.totalRounds}\``, true)
-                .addField('Score', `\`${m.score}\``, true)
-        })
+
+        const matchDetailComponents = await matches.map((match) => this.matchDetails(match))
+        const mainComponent = [matchEmbed, ...matchDetailComponents]
 
         return {
-            embeds: [matchEmbed],
+            embeds: mainComponent,
         }
+    }
+
+    // single match details embed to be used to show match history
+    static matchDetails(m) {
+        const match = new MessageEmbed()
+            .setColor('#125D98')
+            .addField('Winning Team', `\`${m.winningTeam}\``, true)
+            .addField('Team', `\`${m.losingTeam}\``, true)
+            .addField('Map Played', `\`${m.map}\``, true)
+            .addField('Elo Gained/Lost', `\`${m.eloDiff}\``, true)
+            .addField('Rounds Played', `\`${m.totalRounds}\``, true)
+            .addField('Score', `\`${m.score}\``, true)
+
+        return match
     }
 }
 

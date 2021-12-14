@@ -311,7 +311,8 @@ class Factory {
     async getMatchHistory(teamUUID) {
         const matchHistory = await knex(MATCH_TABLE)
             .select('*')
-            .whereIn('teams', [teamUUID])
+            .where({ losingTeam: teamUUID })
+            .orWhere({ winningTeam: teamUUID })
 
         const matches = matchHistory.map((m) => new Match(m))
 
