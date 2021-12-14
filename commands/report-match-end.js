@@ -1,6 +1,6 @@
 
 /*
-    /report-match-end command of gls bot to report the score after a match ends: to be used staright after the match ends otherwise it will not work
+/report-match-end command of gls bot to report the score after a match ends: to be used straight after the match ends otherwise it will not work
 */
 
 /* eslint-disable no-restricted-syntax,no-await-in-loop */
@@ -83,12 +83,12 @@ module.exports = {
         await client.factory.updateTeamRating(userPlayer.team, team1Elo - diff)
         await client.factory.updateTeamRating(team2Cap.team, team1Elo + diff)
 
-        // updating adding match to the match histoy table in db:-
-        const { matchid } = match.metadata
+        // updating adding match to the match history table in db:-
+        const { matchid: matchId } = match.metadata
         const { map } = match.metadata
         const totalRounds = match.rounds.length
         const score = `${match.teams.red.rounds_won}-${match.teams.red.rounds_lost}`
-        await client.factory.createMatch(matchid, map, userPlayer.team.name, team2Cap.team.name, totalRounds, -score, -diff) // calling db updation function to upfdate match history
+        await client.factory.createMatch(matchId, map, userPlayer.team.name, team2Cap.team.name, totalRounds, -score, -diff) // calling db update function to update match history
 
         // Updating players stats:
         await match.players.all_players.map(async (p) => {

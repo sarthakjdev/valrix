@@ -66,6 +66,8 @@ module.exports = {
             if (buttonInteraction.customId === 'startQueue') {
                 const searchingQueueComponents = Components.searchingQueue(interaction.client.queueManager.size)
                 await buttonInteraction.update(searchingQueueComponents)
+                // eslint-disable-next-line no-param-reassign
+                buttonInteraction.user.userPlayer = await client.factory.getPlayerById(buttonInteraction.user.id)
                 interaction.client.queueManager.addToQueue(buttonInteraction)
             }
 

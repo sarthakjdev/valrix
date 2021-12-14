@@ -138,7 +138,7 @@ class Factory {
     }
 
     /**
-     * Get all registerd teams
+     * Get all registered teams
      * @return {Promise<any[]>}
      */
     async getRegisteredTeams() {
@@ -272,7 +272,7 @@ class Factory {
      * @param {string} uuid
      * @param {string} map
      * @param {string} winningTeam
-     * @param {string} losigTeam
+     * @param {string} losingTeam
      * @param {string} totalRounds
      * @param {string} eloDiff
      * @param {string} score
@@ -284,9 +284,8 @@ class Factory {
                 uuid, map, winningTeam, losingTeam, totalRounds, score, eloDiff,
             })
             .returning('*')
-        const match = new Match(dbMatch)
 
-        return match
+        return new Match(dbMatch)
     }
 
     /**
@@ -298,9 +297,7 @@ class Factory {
         const [dbMatch] = await knex(MATCH_TABLE)
             .select({ uuid })
 
-        const match = new Match(dbMatch)
-
-        return match
+        return new Match(dbMatch)
     }
 
     /**
@@ -314,9 +311,7 @@ class Factory {
             .where({ losingTeam: teamUUID })
             .orWhere({ winningTeam: teamUUID })
 
-        const matches = matchHistory.map((m) => new Match(m))
-
-        return matches
+        return matchHistory.map((m) => new Match(m))
     }
 }
 

@@ -45,7 +45,7 @@ class Components {
         }
     }
 
-    // component  generated for update afetr  queue button is clicked
+    // component  generated for update after  queue button is clicked
     static searchingQueue(size) {
         const startQueueDisabled = new MessageButton()
             .setCustomId('startQueue')
@@ -86,7 +86,7 @@ class Components {
         }
     }
 
-    // Componenet for join game link to redirect user to the channe created
+    // Component for join game link to redirect user to the channe created
     static getJoinGame(url) {
         const joinGameButton = new MessageButton().setLabel('Join-Game')
             .setStyle('LINK')
@@ -146,21 +146,21 @@ class Components {
         if (!availableMaps.length) {
             if (i.customId === 'Attacker') {
                 if (i.user.id === cap1.id) {
-                    description = ` **Team A  have choosen Attacker side**`
+                    description = ` **Team A  have chosen Attacker side**`
                     image = ATTACKER
                 }
                 if (i.user.id === cap2) {
-                    description = ` **Team B have choosen Attacker side**`
+                    description = ` **Team B have chosen Attacker side**`
                     image = ATTACKER
                 }
             }
             if (i.customId === 'Defender') {
                 if (i.user.id === cap1.id) {
-                    description = ` **Team A  have choosen Defender side**`
+                    description = ` **Team A  have chosen Defender side**`
                     image = DEFENDER
                 }
                 if (i.user.id === cap2) {
-                    description = ` **Team B have choosen Defender side**`
+                    description = ` **Team B have chosen Defender side**`
                     image = DEFENDER
                 }
             }
@@ -181,7 +181,7 @@ class Components {
         }
     }
 
-    // Components generated to show the selectd map embed
+    // Components generated to show the select map embed
     static mapComponents(availableMaps, selectedMap) {
         const selectedMapImage = process.env[selectedMap.toUpperCase()]
         const selectedMapComponents = new MessageEmbed()
@@ -214,15 +214,14 @@ class Components {
 
     // Component for providing team information
     static teamComponents(team) {
-        const teamInfoComponent = new MessageEmbed()
+        return new MessageEmbed()
             .setAuthor('GLS Bot', `${THUMBNAIL}`)
             .setDescription('Here is your team information')
             .addField('Team Name', `${team.name}`)
-            .addField('Players', `${team.players.map((player) => `<@${player.id}>`).join('\n')}`, true)
+            .addField('Players', `${team.players.map((player) => `<@${player.id}>`)
+                .join('\n')}`, true)
             .setThumbnail(`${THUMBNAIL}`)
-            .setColor('#125D98')
-
-        return teamInfoComponent // haven't returned an object of array because ths funtion has been called in the same class in add/remove player components.
+            .setColor('#125D98') // haven't returned an object of array because ths function has been called in the same class in add/remove player components.
     }
 
     // Components created to be sent on a player either being added or removed from the team.
@@ -263,7 +262,7 @@ class Components {
 
     // Components created to be sent on a player leaving a team
     static playerLeftComponent(player, team) {
-        const playerLeftCompponent = new MessageEmbed()
+        const playerLeftComponent = new MessageEmbed()
             .setAuthor('GLS Bot', `${THUMBNAIL}`)
             .setDescription(`**${player} has left the team ${player.team.name}**`)
             .setThumbnail(`${THUMBNAIL}`)
@@ -271,7 +270,7 @@ class Components {
         const teamInfoComponent = this.teamComponents(team)
 
         return {
-            embeds: [playerLeftCompponent, teamInfoComponent],
+            embeds: [playerLeftComponent, teamInfoComponent],
         }
     }
 
@@ -279,7 +278,7 @@ class Components {
         return Util.embed().setDescription(`:x: **${message}**`)
     }
 
-    // embed for showing correct excetution of a process
+    // embed for showing correct execution of a process
     static successEmbed(message) {
         const embed = new MessageEmbed()
             .setColor('#125D98')
@@ -288,11 +287,11 @@ class Components {
         return embed
     }
 
-    // component to be send after match report comand has been used:
+    // component to be sent after match report command has been used:
     static reportMatch(ratingCalculated, updatedRating) {
         const reportMatchComponent = new MessageEmbed()
             .setAuthor('GLS Bot', `${THUMBNAIL}`)
-            .setDescription(`**Congrats! Match has been  reported** \n You gained/lost ${ratingCalculated} from this match \n Your updated rank in the leadreboard is ${updatedRating}`)
+            .setDescription(`**Congrats! Match has been  reported** \n You gained/lost ${ratingCalculated} from this match \n Your updated rank in the leaderboard is ${updatedRating}`)
             .setThumbnail(`${THUMBNAIL}`)
             .setColor('#125D98')
 
@@ -301,7 +300,7 @@ class Components {
         }
     }
 
-    // Embed to be send after teams has been stages
+    // Embed to be sent after teams has been stages
     static teamsStaged(stagedTeams) {
         const teamStagedComponents = new MessageEmbed()
             .setAuthor('GLS Bot', `${THUMBNAIL}`)

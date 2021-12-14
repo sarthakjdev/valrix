@@ -17,7 +17,7 @@ module.exports = {
             return interaction.editReply({ embeds: [embed] })
         }
 
-        const playerInfoComponent = await Components.playerInfo(infoPlayer, user)
+        const playerInfoComponent = Components.playerInfo(infoPlayer, user)
 
         return interaction.editReply(playerInfoComponent)
     },
