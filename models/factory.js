@@ -278,10 +278,10 @@ class Factory {
      * @param {string} score
      * @returns {Promise<Match>}
      */
-    async createMatch(uuid, teams, map, winningTeam, losingTeam, totalRounds, score, eloDiff) {
+    async createMatch(uuid, map, winningTeam, losingTeam, totalRounds, score, eloDiff) {
         const [dbMatch] = await knex(MATCH_TABLE)
             .insert({
-                uuid, teams, map, winningTeam, losingTeam, totalRounds, score, eloDiff,
+                uuid, map, winningTeam, losingTeam, totalRounds, score, eloDiff,
             })
             .returning('*')
         const match = new Match(dbMatch)

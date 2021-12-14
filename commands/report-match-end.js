@@ -87,9 +87,8 @@ module.exports = {
         const { matchid } = match.metadata
         const { map } = match.metadata
         const totalRounds = match.rounds.length
-        const teams = [`${userPlayer.team.uuid}`, `${team2Cap.team.uuid}`]
         const score = `${match.teams.red.rounds_won}-${match.teams.red.rounds_lost}`
-        await client.factory.createMatch(matchid, teams, map, userPlayer.team.name, team2Cap.team.name, totalRounds, -score, -diff) // calling db updation function to upfdate match history
+        await client.factory.createMatch(matchid, map, userPlayer.team.name, team2Cap.team.name, totalRounds, -score, -diff) // calling db updation function to upfdate match history
 
         // Updating players stats:
         await match.players.all_players.map(async (p) => {
