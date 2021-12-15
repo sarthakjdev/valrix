@@ -184,8 +184,8 @@ module.exports = {
 
             return interaction.editReply({ embeds: [embed] })
         }
-        const matches = await client.factory.getMatchHistory(player.team)
-        const teamHistoryComponent = Components.matchHistory(matches, player.team.name)
+        const matches = await client.factory.getMatchHistory(player.team.uuid)
+        const teamHistoryComponent = await Components.matchHistory(matches, player.team.name)
 
         return interaction.editReply(teamHistoryComponent)
     },

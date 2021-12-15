@@ -352,8 +352,8 @@ class Components {
     static matchDetails(m) {
         const match = new MessageEmbed()
             .setColor('#125D98')
-            .addField('Winning Team', `\`${m.winningTeam}\``, true)
-            .addField('Team', `\`${m.losingTeam}\``, true)
+            .addField('Winning Team', `\`${m.winningTeamName}\``, true)
+            .addField('Losing Team', `\`${m.losingTeamName}\``, true)
             .addField('Map Played', `\`${m.map}\``, true)
             .addField('Elo Gained/Lost', `\`${m.eloDiff}\``, true)
             .addField('Rounds Played', `\`${m.totalRounds}\``, true)

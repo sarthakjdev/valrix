@@ -278,10 +278,10 @@ class Factory {
      * @param {string} score
      * @returns {Promise<Match>}
      */
-    async createMatch(uuid, map, winningTeam, losingTeam, totalRounds, score, eloDiff) {
+    async createMatch(uuid, map, winningTeamUUID, winningTeamName, losingTeamUUID, losingTeamName, totalRounds, score, eloDiff) {
         const [dbMatch] = await knex(MATCH_TABLE)
             .insert({
-                uuid, map, winningTeam, losingTeam, totalRounds, score, eloDiff,
+                uuid, map, winningTeamUUID, winningTeamName, losingTeamUUID, losingTeamName, totalRounds, score, eloDiff,
             })
             .returning('*')
 
@@ -308,8 +308,9 @@ class Factory {
     async getMatchHistory(teamUUID) {
         const matchHistory = await knex(MATCH_TABLE)
             .select('*')
-            .where({ losingTeam: teamUUID })
-            .orWhere({ winningTeam: teamUUID })
+            .where({ losingTeamUUID: teamUUID })
+            .orWhere({ winningTeamUUID: teamUUID })
+            .limit(5)
 
         return matchHistory.map((m) => new Match(m))
     }
