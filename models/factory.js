@@ -110,10 +110,10 @@ class Factory {
      * @param {number} averageCombatScore
      * @returns {Promise<Player>}
      */
-    async updatePlayerStats(playerId, kills, deaths, assists, averageCombatScore) {
+    async updatePlayerStats(playerId, kills, deaths, assists, noOfMatches, averageCombatScore) {
         const [dbPlayer] = await knex(PLAYER_TABLE)
             .update({
-                kills, deaths, assists, average_combat_score: averageCombatScore,
+                kills, deaths, assists, noOfMatches, average_combat_score: averageCombatScore,
             })
             .where({ id: playerId })
             .returning('*')

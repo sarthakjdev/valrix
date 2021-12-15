@@ -5,13 +5,14 @@ class Player {
         this.id = data.id
         this.tag = data.valorantTag
         this.name = data.valorantName
+        this.valorantId = data.valorantId
+        this.team = data.team
         this.status = data.status
         this.kills = data.kills
         this.assists = data.assists
         this.deaths = data.deaths
         this.averageCombatScore = data.averageCombatScore
-        this.team = data.team
-        this.valorantId = data.valorantId
+        this.noOfMatches = data.noOfMatches
     }
 
     get ign() {
