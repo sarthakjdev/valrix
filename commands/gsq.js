@@ -37,7 +37,7 @@ module.exports = {
             // Check if owner's team have enough players
             const userPlayer = await client.factory.getPlayerById(buttonInteraction.user.id)
             if (!userPlayer.team.qualified) {
-                const embed = Components.errorEmbed('Your team doesn\'t have enough players to search for queue.')
+                const embed = Components.errorEmbed('Your team doesn\'t have enough players to search for queue or your team has not been stage yet.')
 
                 return buttonInteraction.reply({ embeds: [embed] })
             }
