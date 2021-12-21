@@ -16,9 +16,17 @@ module.exports = {
         const valorantCreds = inGameName.split('#')
         const valorantName = valorantCreds[0]
         const valorantTag = valorantCreds[1]
+        // check if the user is a valid player or not
         const valorantPlayer = await valorantAPI.getPlayerByIGN(valorantName, valorantTag)
         if (!valorantPlayer) {
             const embed = Components.errorEmbed(`Valorant Player not found for ${valorantName}#${valorantTag}. Check your valorant credentials again.`)
+
+            return interaction.editReply({ embeds: [embed] })
+        }
+        const playerRating = await valorantAPI.getPlayerRating(valorantName, valorantTag)
+        // check if the user has elo info available
+        if (!playerRating.elo) {
+            const embed = Components.errorEmbed(`No competitive rating information found. Invalid registeration`)
 
             return interaction.editReply({ embeds: [embed] })
         }
