@@ -8,14 +8,8 @@ module.exports = [
         description: 'register yourself with your valorant account',
         options: [
             {
-                name: 'valorant-name',
+                name: 'valorant-id',
                 description: 'Valorant in-game name. Example Hiro',
-                type: 'STRING',
-                required: true,
-            },
-            {
-                name: 'valorant-tag',
-                description: 'Valorant in-game tag. Example 1234',
                 type: 'STRING',
                 required: true,
             },
