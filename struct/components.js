@@ -251,7 +251,7 @@ class Components {
             .addField('Total kills :', `${player.kills}`)
             .addField('Total deaths :', `${player.deaths}`)
             .addField('Total assists :', `${player.assists}`)
-            .addField('Average Combat Score :', `${player.average_combat_score}`)
+            .addField('Average Combat Score :', `${player.averageCombatScore}`)
             .setThumbnail(`${THUMBNAIL}`)
             .setColor('#125D98')
 
