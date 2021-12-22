@@ -92,7 +92,7 @@ module.exports = {
 
         // Updating players stats:
         await match.players.all_players.map(async (p) => {
-            const player = await client.factory.getPlayerByValorantId(p.uuid)
+            const player = await client.factory.getPlayerByValorantId(p.puuid)
             const kills = player.kills + p.stats.kills
             const deaths = player.deaths + p.stats.deaths
             const assists = player.assists + p.stats.assists
