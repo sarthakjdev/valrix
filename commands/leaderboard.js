@@ -16,7 +16,7 @@ module.exports = {
         if (teams.length === 0) {
             const errorEmbed = await Components.errorEmbed('No team to be ranked in the leaderboard')
 
-            return interaction.editReply(errorEmbed)
+            return interaction.editReply({ embeds: [errorEmbed] })
         }
         const leaderboardComponent = Components.leaderboard(teams)
 
