@@ -81,7 +81,7 @@ module.exports = {
         const diff = await this.calcRating(team1Elo, team2Elo, team1Score, team2Score)
 
         await client.factory.updateTeamRating(userPlayer.team, team1Elo - diff)
-        await client.factory.updateTeamRating(team2Cap.team, team1Elo + diff)
+        await client.factory.updateTeamRating(team2Cap.team, team2Elo + diff)
 
         // updating adding match to the match history table in db:-
         const { matchid: matchId } = match.metadata
