@@ -247,7 +247,6 @@ class Components {
             .addField('Player:', `<@${player.id}>`)
             .addField('Valorant Game Name: :', `${player.name}`)
             .addField('Valorant Tagline: :', `${player.tag}`)
-            .addField('Team Name: :', `${player.team.name}`)
             .addField('Total kills :', `${player.kills}`)
             .addField('Total deaths :', `${player.deaths}`)
             .addField('Total assists :', `${player.assists}`)
