@@ -12,7 +12,7 @@ module.exports = {
         await interaction.deferReply()
         // extracting teams in desc order of their rating:
         const teams = await client.factory.getLeaderboard()
-        if (!teams) {
+        if (teams.length === 0) {
             const errorEmbed = await Components.errorEmbed('No team to be ranked in the leaderboard')
 
             return interaction.editReply(errorEmbed)
