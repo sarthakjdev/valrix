@@ -8,8 +8,43 @@ const valorantAPI = require('../models/valorantAPI')
 
 module.exports = {
     name: 'register',
-    exec: async (interaction) => {
+    async newRegisteration(interaction, valorantPlayer) {
         const { client, user } = interaction
+        const player = await client.factory.getPlayerById(user.id)
+        if (player) {
+            const embed = Components.errorEmbed(`You have already registered you account with us`)
+
+            return interaction.editReply({ embeds: [embed] })
+        }
+
+        await client.factory.createPlayer(user.id, valorantPlayer.puuid, valorantPlayer.name, valorantPlayer.tag)
+
+        // addding verifies role
+        const guild = await interaction.client.guilds.fetch(process.env.HOME_GUILD_ID)
+        const member = await guild.members.fetch(interaction.user.id)
+        await member.roles.add(process.env.VERIFIED_ROLE)
+
+        const successEmbed = Components.successEmbed('You have succcessfully registered your valorant account')
+
+        return interaction.editReply({ embeds: [successEmbed] })
+    },
+    async editRegister(interaction, valorantPlayer) {
+        const { client, user } = interaction
+
+        const player = await client.factory.getPlayerById(user.id)
+        if (!player) {
+            const embed = Components.errorEmbed(`You have not registered you account with us`)
+
+            return interaction.editReply({ embeds: [embed] })
+        }
+
+        await client.factory.editPlayer(user.id, valorantPlayer.name, valorantPlayer.tag, valorantPlayer.puuid)
+
+        const successEmbed = Components.successEmbed('You have succcessfully edited your valorant credentials')
+
+        return interaction.editReply({ embeds: [successEmbed] })
+    },
+    async exec(interaction) {
         await interaction.deferReply()
         // Extract valorant player data
         const inGameName = interaction.options.get('valorant-id').value
@@ -30,23 +65,13 @@ module.exports = {
 
             return interaction.editReply({ embeds: [embed] })
         }
-
-        const player = await client.factory.getPlayerById(user.id)
-        if (player) {
-            const embed = Components.errorEmbed(`You have already registered you account with us`)
-
-            return interaction.editReply({ embeds: [embed] })
+        switch (interaction.options.getSubcommand()) {
+            case 'new':
+                return this.newRegisteration(interaction, valorantPlayer)
+            case 'edit':
+                return this.editRegister(interaction, valorantPlayer)
+            default:
+                return interaction.editReply('Not implemented')
         }
-
-        await client.factory.createPlayer(user.id, valorantPlayer.puuid, valorantPlayer.name, valorantPlayer.tag)
-
-        // addding verifies role
-        const guild = await interaction.client.guilds.fetch(process.env.HOME_GUILD_ID)
-        const member = await guild.members.fetch(interaction.user.id)
-        await member.roles.add(process.env.VERIFIED_ROLE)
-
-        const successEmbed = Components.successEmbed('You have succcessfully registered your valorant account')
-
-        return interaction.editReply({ embeds: [successEmbed] })
     },
 }

@@ -113,7 +113,7 @@ class Factory {
     async updatePlayerStats(playerId, kills, deaths, assists, noOfMatches, averageCombatScore) {
         const [dbPlayer] = await knex(PLAYER_TABLE)
             .update({
-                kills, deaths, assists, noOfMatches, average_combat_score: averageCombatScore,
+                kills, deaths, assists, noOfMatches, averageCombatScore,
             })
             .where({ id: playerId })
             .returning('*')
@@ -215,6 +215,24 @@ class Factory {
         if (!dbPlayer) return undefined
         const player = new Player(dbPlayer)
         if (dbPlayer.team) player.team = await this.getTeamByUuid(dbPlayer.team)
+
+        return player
+    }
+
+    /**
+     *
+     * @param {sting} id
+     * @param {string} valorantName
+     * @param {string} valorantTag
+     * @param {string} valorantUUID
+     * @returns {Promise<Player|undefined>}
+     */
+    async editPlayer(id, valorantName, valorantTag, valorantUUID) {
+        const [dbPlayer] = await knex(PLAYER_TABLE)
+            .where({ id })
+            .update({ valorantTag, valorantName, valorantId: valorantUUID })
+
+        const player = new Player(dbPlayer)
 
         return player
     }

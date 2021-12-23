@@ -6,12 +6,33 @@ module.exports = [
     {
         name: 'register',
         description: 'register yourself with your valorant account',
+        type: 2,
         options: [
             {
-                name: 'valorant-id',
-                description: 'Valorant in-game name. Example Hiro',
-                type: 'STRING',
-                required: true,
+                name: 'new',
+                description: 'to register a new valorant account',
+                type: 1,
+                options: [
+                    {
+                        name: 'valorant-id',
+                        description: 'Valorant in-game name. Example Hiro#000',
+                        type: 'STRING',
+                        required: true,
+                    },
+                ],
+            },
+            {
+                name: 'edit',
+                description: 'to edit a regisered valorant account',
+                type: 1,
+                options: [
+                    {
+                        name: 'valorant-id',
+                        description: 'Valorant in-game name. Example Hiro#000',
+                        type: 'STRING',
+                        required: true,
+                    },
+                ],
             },
         ],
     },
@@ -96,6 +117,11 @@ module.exports = [
                         type: 'STRING',
                     },
                 ],
+            },
+            {
+                name: 'leave',
+                description: 'leave the team',
+                type: 1,
             },
             {
                 name: 'history',

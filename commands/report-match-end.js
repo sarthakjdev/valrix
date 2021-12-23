@@ -24,6 +24,21 @@ module.exports = {
         await category.delete()
     },
 
+    async switchVc(interaction, team1, team2) {
+        const guild = await interaction.client.guilds.fetch(process.env.HOME_GUILD_ID)
+        const { members } = guild
+        const generalChannel = await guild.channels.fetch(process.env.GENERAL_VC)
+        const team1Members = team1._players.map((player) => members.cache.get(player.id))
+        const team2Members = team2._players.map((player) => members.cache.get(player.id))
+        await Promise.all(team1Members.map(async (player) => {
+            if (player.voice) await player.voice.setChannel(generalChannel)
+        }))
+
+        await Promise.all(team2Members.map(async (player) => {
+            if (player.voice) await player.voice.setChannel(generalChannel)
+        }))
+    },
+
     async exec(interaction) {
         const { client, user } = interaction
         const userPlayer = await client.factory.getPlayerById(user.id)
@@ -100,8 +115,9 @@ module.exports = {
             let averageScore
             if (noOfMatches === 1) averageScore = p.stats.score
             else averageScore = player.averageCombatScore * player.noOfMatches + p.stats.score / noOfMatches
-            await client.factory.updatePlayerStats(player.id, kills, deaths, assists, averageScore)
+            await client.factory.updatePlayerStats(player.id, kills, deaths, assists, noOfMatches, averageScore)
         })
+        await this.switchVc(interaction, team, team2)
 
         return this.deleteChannels(interaction)
     },
