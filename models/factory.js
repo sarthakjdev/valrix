@@ -227,10 +227,11 @@ class Factory {
      * @param {string} valorantUUID
      * @returns {Promise<Player|undefined>}
      */
-    async editPlayer(id, valorantName, valorantTag, valorantUUID) {
+    async editPlayer(id, valorantName, valorantTag, valorantId) {
         const [dbPlayer] = await knex(PLAYER_TABLE)
             .where({ id })
-            .update({ valorantTag, valorantName, valorantId: valorantUUID })
+            .update({ valorantTag, valorantName, valorantId })
+            .returning('*')
 
         const player = new Player(dbPlayer)
 

@@ -60,7 +60,7 @@ module.exports = {
         }
         const playerRating = await valorantAPI.getPlayerRating(valorantName, valorantTag)
         // check if the user has elo info available
-        if (!playerRating.elo) {
+        if (!playerRating) {
             const embed = Components.errorEmbed(`No competitive rating information found. Invalid registeration`)
 
             return interaction.editReply({ embeds: [embed] })
