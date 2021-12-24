@@ -9,7 +9,7 @@ class ValorantAPI {
     async getPlayerByIGN(name, tag) {
         try {
             const { data: { data } } = await this.axios.get(`/valorant/v1/account/${name}/${tag}?force=true`)
-            console.log(data)
+
             return data.region === this.region ? data : undefined
         } catch (err) {
             return undefined

@@ -51,9 +51,7 @@ module.exports = {
         const inGameName = interaction.options.get('valorant-id').value
         const valorantCreds = inGameName.split('#')
         const valorantName = valorantCreds[0]
-        console.log('valorantName ', valorantName)
         const valorantTag = valorantCreds[1]
-        console.log('valorantTag ', valorantTag)
         // check if the user is a valid player or not
         const valorantPlayer = await valorantAPI.getPlayerByIGN(valorantName, valorantTag)
         console.log('valorantPlayer ', valorantPlayer)
@@ -63,6 +61,7 @@ module.exports = {
             return interaction.editReply({ embeds: [embed] })
         }
         const playerRating = await valorantAPI.getPlayerRating(valorantName, valorantTag)
+        console.log("playerRating ", playerRating);
         // check if the user has elo info available
         if (!playerRating) {
             const embed = Components.errorEmbed(`No competitive rating information found. Invalid registeration`)
