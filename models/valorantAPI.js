@@ -19,6 +19,7 @@ class ValorantAPI {
     async getPlayerRating(name, tag) {
         try {
             const { data: { data } } = await this.axios.get(`/valorant/v1/mmr/${this.region}/${name}/${tag}`)
+            console.log(data)
 
             return data
         } catch (err) {

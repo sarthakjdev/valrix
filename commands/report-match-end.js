@@ -113,8 +113,8 @@ module.exports = {
             const assists = player.assists + p.stats.assists
             const noOfMatches = player.noOfMatches + 1
             let averageScore
-            if (noOfMatches === 1) averageScore = p.stats.score
-            else averageScore = player.averageCombatScore * player.noOfMatches + p.stats.score / noOfMatches
+            if (noOfMatches === 1) averageScore = p.stats.score / totalRounds
+            else averageScore = player.averageCombatScore * player.noOfMatches + (p.stats.score / totalRounds) / noOfMatches
             await client.factory.updatePlayerStats(player.id, kills, deaths, assists, noOfMatches, averageScore)
         })
         await this.switchVc(interaction, team, team2)
