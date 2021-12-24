@@ -10,6 +10,7 @@ module.exports = {
     name: 'register',
     async newRegisteration(interaction, valorantPlayer) {
         const { client, user } = interaction
+        console.log('valorantPlayer ', valorantPlayer)
         const player = await client.factory.getPlayerById(user.id)
         if (player) {
             const embed = Components.errorEmbed(`You have already registered you account with us`)
@@ -30,7 +31,7 @@ module.exports = {
     },
     async editRegister(interaction, valorantPlayer) {
         const { client, user } = interaction
-
+        console.log('valorantPlayer ', valorantPlayer)
         const player = await client.factory.getPlayerById(user.id)
         if (!player) {
             const embed = Components.errorEmbed(`You have not registered you account with us`)
@@ -53,6 +54,7 @@ module.exports = {
         const valorantTag = valorantCreds[1]
         // check if the user is a valid player or not
         const valorantPlayer = await valorantAPI.getPlayerByIGN(valorantName, valorantTag)
+        console.log('valorantPlayer ', valorantPlayer)
         if (!valorantPlayer) {
             const embed = Components.errorEmbed(`Valorant Player not found for ${valorantName}#${valorantTag}. Check your valorant credentials again.`)
 
