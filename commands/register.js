@@ -10,7 +10,6 @@ module.exports = {
     name: 'register',
     async newRegisteration(interaction, valorantPlayer) {
         const { client, user } = interaction
-        console.log('valorantPlayer ', valorantPlayer)
         const player = await client.factory.getPlayerById(user.id)
         if (player) {
             const embed = Components.errorEmbed(`You have already registered you account with us`)
@@ -31,7 +30,6 @@ module.exports = {
     },
     async editRegister(interaction, valorantPlayer) {
         const { client, user } = interaction
-        console.log('valorantPlayer ', valorantPlayer)
         const player = await client.factory.getPlayerById(user.id)
         if (!player) {
             const embed = Components.errorEmbed(`You have not registered you account with us`)

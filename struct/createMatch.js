@@ -107,15 +107,15 @@ const createMatch = async (interactions) => {
     const mapSelectionCollector = mapSelectionMsg.createMessageComponentCollector({ componentType: 'BUTTON' })
     mapSelectionCollector.on('collect', async (buttonInteraction) => {
         let actionTaken = 'banned'
+        if (buttonInteraction.user.id !== turn.id) {
+            return buttonInteraction.reply({ content: `You're not allowed to click button`, ephemeral: true })
+        }
         if (maps.length === 2) actionTaken = 'Selected'
         if (maps.length === 2 && maps.includes(buttonInteraction.customId)) {
             const selectedMapComponents = Components.mapComponents(maps, buttonInteraction.customId)
             await gameSettingsChannel.send(selectedMapComponents)
         }
         if (maps.length === 1 && ['Attacker', 'Defender'].includes(buttonInteraction.customId)) actionTaken = 'Selected'
-        if (buttonInteraction.user.id !== turn.id) {
-            return buttonInteraction.reply({ content: `You're not allowed to click button`, ephemeral: true })
-        }
         if (turn.id === teamOwner1.id) {
             turn = teamOwner2
             await buttonInteraction.reply({ content: `You have ${actionTaken} ${buttonInteraction.customId}`, ephemeral: true })
