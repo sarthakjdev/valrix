@@ -1,11 +1,12 @@
 {
-  "name": "que-bot",
+  "name": "valrix_bot",
   "version": "0.0.1",
   "description": "Discord bot for queuing players.",
-  "main": "index.js.js",
-  "author": [
-    "Sarthak Jain contact.sarthakjain@gmail.com"
-  ],
+  "main": "index.js",
+  "author": {
+    "name": "Sarthak Jain",
+    "email": "contact.sarthakjain@gmail.com"
+},
   "contributors": [
     "Darshan Patel <heyforscht@gmail.com>"
   ],
