@@ -2,7 +2,7 @@
 
 A complete discord bot with utillty to have a personal matchmaking and ranking system in the discord server.
 
-> Each player can regsiter themselves with the bot. 
+> Each player can register themselves with the bot. 
 
 > Players can create teams, add player, remove player, and 
 
